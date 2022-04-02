@@ -1,9 +1,7 @@
-
-
 /*Pranavi Remidi     1001956946
   Krishna Chaithanya 1001957981
   Madhuri Mittapalli 1001856681*/
-  .App {
+.App {
   text-align: center;
 }
 
@@ -40,4 +38,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.nav-item.dropdown:hover > div {
+  display: block !important;
 }
