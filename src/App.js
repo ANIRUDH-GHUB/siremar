@@ -20,8 +20,19 @@ import Residentpage from "./pages/Residentpage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { userRole } from "./constants/CommonConstants";
+import Blog from "./pages/Blog";
+import Post from "./pages/Post";
+import CreatePost from "./pages/CreatePost";
+import ManageResidents from "./pages/ManageResidents";
 
 function App() {
+  // let cachedRole = localStorage.getItem("user_role");
+  // console.log(Object.values(userRole));
+  // if (!Object.values(userRole).includes(cachedRole)) {
+  //   cachedRole = "EMPTY";
+  // }
+  // console.log(cachedRole);
+
   return (
     <Router basename="/wdm">
       <Routes>
@@ -33,7 +44,7 @@ function App() {
         <Route
           path="/adminpage"
           element={
-            <ProtectedRoute userRole={userRole.admin}>
+            <ProtectedRoute userRole={[userRole.admin]}>
               <Adminpage />
             </ProtectedRoute>
           }
@@ -43,7 +54,7 @@ function App() {
         <Route
           path="/inspectorpage"
           element={
-            <ProtectedRoute userRole={userRole.inspector}>
+            <ProtectedRoute userRole={[userRole.inspector]}>
               <Inspectorpage />
             </ProtectedRoute>
           }
@@ -51,8 +62,40 @@ function App() {
         <Route
           path="/residentpage"
           element={
-            <ProtectedRoute userRole={userRole.resident}>
+            <ProtectedRoute userRole={[userRole.resident]}>
               <Residentpage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/blog"
+          element={
+            <ProtectedRoute userRole={Object.values(userRole)}>
+              <Blog />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/post/:id"
+          element={
+            <ProtectedRoute userRole={Object.values(userRole)}>
+              <Post />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create"
+          element={
+            <ProtectedRoute userRole={Object.values(userRole)}>
+              <CreatePost />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-residents"
+          element={
+            <ProtectedRoute userRole={Object.values(userRole)}>
+              <ManageResidents />
             </ProtectedRoute>
           }
         />

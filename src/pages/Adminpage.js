@@ -1,231 +1,148 @@
 /*Pranavi Remidi     1001956946
   Krishna Chaithanya 1001957981
   Madhuri Mittapalli 1001856681*/
-import React from "react";
+import React, { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import Barchart from "../components/Barchart";
-import Navbar from "../components/Navbar";
 import Navbar2 from "../components/Navbar2";
+import Loading from "../components/Loading";
+import { hostName, schoolSvc, usersSvc } from "../constants/ApiEndPoints";
+import Sidenav from "../components/Sidenav";
 
 function Adminpage() {
+  const [residents, setResidents] = React.useState([]);
+  const [inspectors, setInspectors] = React.useState([]);
+  const [schools, setSchools] = React.useState([]);
+  const [businesses, setBusinesses] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  useEffect(() => {
+    const usersUrl = hostName + usersSvc;
+    const schoolsUrl = hostName + schoolSvc;
+
+    fetch(usersUrl, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((response) => {
+        setIsLoading(false);
+        setResidents(response.filter((user) => user.role === "subscriber"));
+        setInspectors(response.filter((user) => user.role === "editor"));
+      })
+      .catch((error) => console.log(error.message));
+    setIsLoading(true);
+    fetch(schoolsUrl, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((response) => {
+        setIsLoading(false);
+        setSchools(response);
+      })
+      .catch((error) => console.log(error.message));
+  }, []);
+
   return (
-    <div class="sb-nav-fixed">
+    <div className="sb-nav-fixed">
       <Navbar2 />
       <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
-          <nav
-            class="sb-sidenav accordion sb-sidenav-dark"
-            id="sidenavAccordion"
-          >
-            <div class="sb-sidenav-menu">
-              <div class="nav">
-                <br></br>
-                <br></br>
-                <a class="nav-link" href="index.html">
-                  <div class="sb-nav-link-icon">
-                    <i class="fas fa-tachometer-alt"></i>
-                  </div>
-                  Dashboard
-                </a>
-
-                <a
-                  class="nav-link collapsed"
-                  href="#"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseLayouts"
-                  aria-expanded="false"
-                  aria-controls="collapseLayouts"
-                >
-                  <div class="sb-nav-link-icon">
-                    <i class="fas fa-columns"></i>
-                  </div>
-                  Layouts
-                  <div class="sb-sidenav-collapse-arrow">
-                    <i class="fas fa-angle-down"></i>
-                  </div>
-                </a>
-                <div
-                  class="collapse"
-                  id="collapseLayouts"
-                  aria-labelledby="headingOne"
-                  data-bs-parent="#sidenavAccordion"
-                >
-                  <nav class="sb-sidenav-menu-nested nav">
-                    <a class="nav-link" href="layout-static.html">
-                      Static Navigation
-                    </a>
-                    <a class="nav-link" href="layout-sidenav-light.html">
-                      Light Sidenav
-                    </a>
-                  </nav>
-                </div>
-                <a
-                  class="nav-link collapsed"
-                  href="#"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapsePages"
-                  aria-expanded="false"
-                  aria-controls="collapsePages"
-                >
-                  <div class="sb-nav-link-icon">
-                    <i class="fas fa-book-open"></i>
-                  </div>
-                  Pages
-                  <div class="sb-sidenav-collapse-arrow">
-                    <i class="fas fa-angle-down"></i>
-                  </div>
-                </a>
-                <div
-                  class="collapse"
-                  id="collapsePages"
-                  aria-labelledby="headingTwo"
-                  data-bs-parent="#sidenavAccordion"
-                >
-                  <nav
-                    class="sb-sidenav-menu-nested nav accordion"
-                    id="sidenavAccordionPages"
-                  >
-                    <a
-                      class="nav-link collapsed"
-                      href="#"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#pagesCollapseAuth"
-                      aria-expanded="false"
-                      aria-controls="pagesCollapseAuth"
-                    >
-                      Authentication
-                      <div class="sb-sidenav-collapse-arrow">
-                        <i class="fas fa-angle-down"></i>
-                      </div>
-                    </a>
-                    <div
-                      class="collapse"
-                      id="pagesCollapseAuth"
-                      aria-labelledby="headingOne"
-                      data-bs-parent="#sidenavAccordionPages"
-                    >
-                      <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="/wdm/login">
-                          Login
-                        </a>
-                        <a class="nav-link" href="/wdm/register">
-                          Register
-                        </a>
-                        <a class="nav-link" href="/wdm/password">
-                          Forgot Password
-                        </a>
-                      </nav>
-                    </div>
-                    <a
-                      class="nav-link collapsed"
-                      href="#"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#pagesCollapseError"
-                      aria-expanded="false"
-                      aria-controls="pagesCollapseError"
-                    >
-                      Error
-                      <div class="sb-sidenav-collapse-arrow">
-                        <i class="fas fa-angle-down"></i>
-                      </div>
-                    </a>
-                    <div
-                      class="collapse"
-                      id="pagesCollapseError"
-                      aria-labelledby="headingOne"
-                      data-bs-parent="#sidenavAccordionPages"
-                    >
-                      <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="401.html">
-                          401 Page
-                        </a>
-                        <a class="nav-link" href="404.html">
-                          404 Page
-                        </a>
-                        <a class="nav-link" href="500.html">
-                          500 Page
-                        </a>
-                      </nav>
-                    </div>
-                  </nav>
-                </div>
-
-                <a class="nav-link" href="charts.html">
-                  <div class="sb-nav-link-icon">
-                    <i class="fas fa-chart-area"></i>
-                  </div>
-                  Charts
-                </a>
-                <a class="nav-link" href="tables.html">
-                  <div class="sb-nav-link-icon">
-                    <i class="fas fa-table"></i>
-                  </div>
-                  Tables
-                </a>
-              </div>
-            </div>
-          </nav>
-        </div>
+        <Sidenav />
         <div id="layoutSidenav_content">
           <main>
-            <div class="container-fluid px-4">
-              <h1 class="mt-4">Dashboard</h1>
-              <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Dashboard</li>
+            <div className="container-fluid px-4">
+              <h1 className="mt-4">Dashboard</h1>
+              <ol className="breadcrumb mb-4">
+                <li className="breadcrumb-item active">Dashboard</li>
               </ol>
-              <div class="row">
-                <div class="col-xl-3 col-md-6">
-                  <div class="card bg-primary text-white mb-4">
-                    <div class="card-body">
-                      <h5>Manage Residents</h5>
-                      <small style={{ fontSize: "12px", paddingLeft: "100px" }}>
-                        20000
-                      </small>
+              <div className="row mb-4">
+                <div className="col-xl-3 col-md-6">
+                  <Loading height={80} isLoading={isLoading}>
+                    <div className="card bg-primary text-white mb-4">
+                      <div className="card-body">
+                        <h5>Manage Residents</h5>
+                        <small
+                          style={{ fontSize: "12px", paddingLeft: "100px" }}
+                        >
+                          {residents.length}
+                        </small>
+                      </div>
                     </div>
-                  </div>
+                  </Loading>
                 </div>
-                <div class="col-xl-3 col-md-6">
-                  <div class="card bg-warning text-white mb-4">
-                    <div class="card-body">
-                      <h5>Manage Inspectors</h5>
-                      <small style={{ fontSize: "12px", paddingLeft: "100px" }}>
-                        154000
-                      </small>
+                <div className="col-xl-3 col-md-6">
+                  <Loading height={80} isLoading={isLoading}>
+                    <div className="card bg-warning text-white mb-4">
+                      <div className="card-body">
+                        <h5>Manage Inspectors</h5>
+                        <small
+                          style={{ fontSize: "12px", paddingLeft: "100px" }}
+                        >
+                          {inspectors.length}
+                        </small>
+                      </div>
                     </div>
-                  </div>
+                  </Loading>
                 </div>
-                <div class="col-xl-3 col-md-6">
-                  <div class="card bg-success text-white mb-4">
-                    <div class="card-body">
-                      <h5> Manage Business </h5>
-                      <small style={{ fontSize: "12px", paddingLeft: "100px" }}>
-                        1560
-                      </small>
+                <div className="col-xl-3 col-md-6">
+                  <Loading height={80} isLoading={isLoading}>
+                    <div className="card bg-success text-white mb-4">
+                      <div className="card-body">
+                        <h5> Manage Business </h5>
+                        <small
+                          style={{ fontSize: "12px", paddingLeft: "100px" }}
+                        >
+                          1560
+                        </small>
+                      </div>
                     </div>
-                  </div>
+                  </Loading>
                 </div>
-                <div class="col-xl-3 col-md-6">
-                  <div class="card bg-danger text-white mb-4">
-                    <div class="card-body">
-                      <h5>Manage Schools</h5>
-                      <small style={{ fontSize: "12px", paddingLeft: "100px" }}>
-                        9
-                      </small>
+                <div className="col-xl-3 col-md-6">
+                  <Loading height={80} isLoading={isLoading}>
+                    <div className="card bg-danger text-white mb-4">
+                      <div className="card-body">
+                        <h5>Manage Schools</h5>
+                        <small
+                          style={{ fontSize: "12px", paddingLeft: "100px" }}
+                        >
+                          {schools.length}
+                        </small>
+                      </div>
                     </div>
-                  </div>
+                  </Loading>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-xl-6 offset-3">
+              <div className="row">
+                <div className="col-xl-6 offset-3">
                   <Barchart />
                 </div>
               </div>
-              <div class="row">
-                <div class="col-xl-6 mt-3">
+              <div className="row">
+                <div className="col-xl-6 mt-3">
                   <h3>
                     {" "}
                     Residents <span> </span>{" "}
                   </h3>
-                  <table class="table  table-bordered table-striped">
+                  <table className="table  table-bordered table-striped">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -235,32 +152,41 @@ function Adminpage() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>pranavi</td>
-                        <td>remidi</td>
-                        <td>pranavi0205@gmail.com</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td> krishna chaithanya </td>
-                        <td> Rayapudi </td>
-                        <td>krishnachaithanya369@gmail.com</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>chinna</td>
-                        <td>rayapudi</td>
-                        <td>chinnarayapudi@gmail.com</td>
-                      </tr>
+                      {isLoading ? (
+                        <tr>
+                          <td colSpan="1">
+                            <Skeleton count={4} />
+                          </td>
+                          <td colSpan="1">
+                            <Skeleton count={4} />
+                          </td>
+                          <td colSpan="1">
+                            <Skeleton count={4} />
+                          </td>
+                          <td colSpan="1">
+                            <Skeleton count={4} />
+                          </td>
+                        </tr>
+                      ) : (
+                        <>
+                          {residents.map((res, index) => (
+                            <tr key={index}>
+                              <th scope="row">{index + 1}</th>
+                              <td>{res.name}</td>
+                              <td>last</td>
+                              <td>{res.email}</td>
+                            </tr>
+                          ))}
+                        </>
+                      )}
                     </tbody>
                   </table>
                 </div>
-                <div class="col-xl-6 mt-3">
+                <div className="col-xl-6 mt-3">
                   <h3>
                     list of <span> counties </span>{" "}
                   </h3>
-                  <table class="table  table-bordered table-striped">
+                  <table className="table  table-bordered table-striped">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -291,12 +217,12 @@ function Adminpage() {
                     </tbody>
                   </table>
                 </div>
-                <div class="col-md-6">
-                  <div class="col-sm-8">
-                    <div class="form-group form-group-textarea mb-md-0">
+                <div className="col-md-6">
+                  <div className="col-sm-8">
+                    <div className="form-group form-group-textarea mb-md-0">
                       <p> CHAT</p>
                       <textarea
-                        class="form-control"
+                        className="form-control"
                         cols="4"
                         rows="5"
                         id="message"
@@ -304,7 +230,7 @@ function Adminpage() {
                         data-sb-validations="required"
                       ></textarea>
                       <div
-                        class="invalid-feedback"
+                        className="invalid-feedback"
                         data-sb-feedback="message:required"
                       >
                         chat here.
@@ -312,9 +238,9 @@ function Adminpage() {
                     </div>
                   </div>
                 </div>
-                <div class="text">
+                <div className="text">
                   <button
-                    class="btn btn-primary btn-xl text-uppercase disabled"
+                    className="btn btn-primary btn-xl text-uppercase disabled"
                     id="submitButton"
                     type="submit"
                   >
@@ -324,8 +250,8 @@ function Adminpage() {
               </div>
             </div>
           </main>
-          <footer class="py-4 bg-light mt-auto">
-            <div class="container-fluid px-4"></div>
+          <footer className="py-4 bg-light mt-auto">
+            <div className="container-fluid px-4"></div>
           </footer>
         </div>
       </div>

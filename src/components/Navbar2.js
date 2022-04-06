@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar2() {
   const username = localStorage.getItem("username");
@@ -16,9 +16,9 @@ function Navbar2() {
 
   return (
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-      <a class="navbar-brand ps-3" href="index.html">
+      <Link class="navbar-brand ps-3" to="/">
         Siremar Admin
-      </a>
+      </Link>
 
       <button
         class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
@@ -28,34 +28,36 @@ function Navbar2() {
         <i class="fas fa-bars"></i>
       </button>
 
-      <ul
-        style={{ paddingLeft: "800px" }}
-        class="navbar-nav  ms-md-0 me-3 me-lg-4"
-      >
+      <ul class="navbar-nav  ms-auto me-3 me-lg-4">
         <li class="nav-item active">
-          <a class="nav-link" href="#">
+          <Link class="nav-link" to="/">
             Home{" "}
-          </a>
+          </Link>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <Link class="nav-link" to="/about">
             About
-          </a>
+          </Link>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <Link class="nav-link" to="/services">
             Services
-          </a>
+          </Link>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <Link class="nav-link" to="/">
             Contact
-          </a>
+          </Link>
+        </li>
+        <li class="nav-item">
+          <Link to="/blog" class="nav-link">
+            Blog
+          </Link>
         </li>
         <li class="nav-item dropdown">
-          <a
+          <Link
             class="nav-link dropdown-toggle"
-            href="#"
+            to="/"
             id="navbarDropdown"
             role="button"
             data-toggle="dropdown"
@@ -63,14 +65,14 @@ function Navbar2() {
             aria-expanded="false"
           >
             {user_role}
-          </a>
+          </Link>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">
+            <Link class="dropdown-item" to="/">
               Action
-            </a>
-            <a class="dropdown-item" href="#">
+            </Link>
+            <Link class="dropdown-item" to="/">
               Another action
-            </a>
+            </Link>
             <div class="dropdown-divider"></div>
             <div class="dropdown-item" onClick={() => handleLogout()}>
               Log out
@@ -79,7 +81,7 @@ function Navbar2() {
         </li>
       </ul>
 
-      <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+      <form class="d-none d-md-inline-block form-inline ms-md me-0 me-md-3 my-2 my-md-0">
         <div class="input-group">
           <input
             class="form-control"

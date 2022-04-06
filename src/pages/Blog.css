@@ -1,0 +1,76 @@
+.blog-container {
+  font-family: "Lora", serif;
+  width: 75%;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+.blog-container a {
+  background: 0 0;
+  color: #0096bb !important;
+  cursor: pointer;
+  display: inline-block !important;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  padding: 0 20px 0 0;
+}
+.blog-container a::after {
+  background: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!-- Generator: Adobe Illustrator 25.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 6.9 12.4' style='enable-background:new 0 0 6.9 12.4;' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .cls-1%7Bfill-rule:evenodd;clip-rule:evenodd;fill:%230096BB;%7D%0A%3C/style%3E%3Cpath id='arrow-CTA' class='cls-1' d='M0.6,12.4c-0.2,0-0.3-0.1-0.4-0.2c-0.2-0.2-0.2-0.6,0-0.8c0,0,0,0,0,0l5.2-5.2L0.2,1 c-0.2-0.2-0.2-0.6,0-0.8c0,0,0,0,0,0C0.3,0.1,0.4,0,0.6,0h0C0.8,0,0.9,0.1,1,0.2l5.7,5.6C6.8,5.9,6.9,6,6.9,6.2 c0,0.2-0.1,0.3-0.2,0.4L1,12.2C0.9,12.3,0.8,12.4,0.6,12.4L0.6,12.4z'/%3E%3C/svg%3E%0A")
+    no-repeat right center;
+  background-size: contain;
+  content: "";
+  display: block;
+  height: 12px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease-in-out;
+  width: 20px;
+}
+
+.blog-article {
+  margin-bottom: 50px;
+}
+
+.blog-header {
+  font-size: 86px;
+  margin: 150px 0;
+}
+
+.blog-article-title {
+  font-size: 46px;
+  margin: 5px 0;
+}
+.blog-article-date {
+  font-size: 20px;
+}
+.blog-article-content {
+  font-size: 16px;
+  margin: 10px 0;
+}
+img {
+  width: 100%;
+  height: auto;
+}
+
+.blog-main img {
+  border-top-right-radius: 200px;
+}
+.blog-sub {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.blog-sub .blog-article {
+  width: 46%;
+}
+
+.blog-article-content * {
+  font-size: 16px;
+  margin: 10px 0;
+}

@@ -44,6 +44,7 @@ function Login() {
           console.log(page[role], userRole[role]);
           localStorage.setItem("user_role", userRole[role]);
           localStorage.setItem("token", res.token);
+          localStorage.setItem("user_id", res.id);
           navigate(page[role]);
         }
         setIsValid(false);
@@ -64,6 +65,28 @@ function Login() {
     } else if (cachedRole === userRole.resident) {
       navigate(page.resident);
     }
+    const loginUrl = hostName + loginSvc;
+    const payload = {
+      username: "admin",
+      password: "password",
+    };
+    fetch(loginUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res);
+        if (res.token && res.user_role.includes(userRole.admin)) {
+          localStorage.setItem("admin_token", res.token);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
@@ -141,7 +164,7 @@ function Login() {
                               isLoading ? "disabled" : ""
                             }`}
                             type="button"
-                            onClick={() => handleLogin("admin")}
+                            onClick={() => handleLogin("inspector")}
                           >
                             Log in as Inspector
                           </button>

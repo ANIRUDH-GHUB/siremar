@@ -1,10 +1,73 @@
 /*Pranavi Remidi     1001956946
   Krishna Chaithanya 1001957981
   Madhuri Mittapalli 1001856681*/
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar2 from "../components/Navbar2";
+import { hostName, schoolSvc } from "../constants/ApiEndPoints";
 
 function Residentpage() {
+  const [schools, setSchools] = React.useState([]);
+  const [registeredSchools, setRegisteredSchools] = React.useState([]);
+  const [selectedSchoolId, setSelectedSchoolId] = React.useState(null);
+
+  const schoolsUrl = hostName + schoolSvc;
+
+  useEffect(() => {
+    fetch(schoolsUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setSchools(data);
+        fetchAllRegisteredSchools(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const checkIfUserIsRegistered = (register) => {
+    const userList = register.split(",");
+    return userList.includes(localStorage.getItem("user_id"));
+  };
+
+  const handleSchoolOption = (e) => {
+    setSelectedSchoolId(e.target.value);
+  };
+
+  const fetchSchoolById = (id) => {
+    return schools.find((school) => school.id === parseInt(id));
+  };
+
+  const fetchAllRegisteredSchools = (schools) => {
+    const registeredSchools = [];
+    schools.forEach((school) => {
+      if (checkIfUserIsRegistered(school.acf.register)) {
+        registeredSchools.push(school);
+      }
+    });
+    console.log("registeredSchools", registeredSchools);
+    setRegisteredSchools(registeredSchools);
+  };
+
+  const registerUserforSchool = (school) => {
+    if (!checkIfUserIsRegistered(school.acf.register)) {
+      console.log(school);
+      fetch(schoolsUrl + `/${selectedSchoolId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("admin_token"),
+        },
+        body: JSON.stringify({
+          acf: {
+            register:
+              school?.acf.register + "," + localStorage.getItem("user_id"),
+          },
+        }),
+      });
+    } else {
+      alert("You are already registered for this school");
+    }
+  };
+
   return (
     <div class="sb-nav-fixed">
       <Navbar2 />
@@ -82,6 +145,38 @@ function Residentpage() {
               </table>
             </div>
           </div>
+          <div class="row mb-5">
+            <div class="col-sm-4">
+              <strong>
+                <p>
+                  Registered <span> Schools </span>{" "}
+                </p>
+              </strong>
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Flight</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Disconts</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {registeredSchools.map((school, index) => (
+                    <tr>
+                      <th scope="row">{index + 1}</th>
+                      <td>{school.title.rendered}</td>
+                      <td>{school.acf.city}</td>
+                      <td>{school.acf.state}</td>
+                      <td>{school.acf.zip}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
           <div class="col-sm-5" style={{ paddingRight: "100px" }}>
             <form>
               <label>
@@ -146,11 +241,17 @@ function Residentpage() {
                     </div>
                   </div>
                   <div class="form-group mb-3">
-                    <select class="form-select" id="inputGroupSelect02">
+                    <select
+                      class="form-select"
+                      id="inputGroupSelect02"
+                      onChange={handleSchoolOption}
+                    >
                       <option selected>Choose School...</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                      {schools.map((school) => (
+                        <option value={school.id}>
+                          {school.title.rendered}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -176,9 +277,12 @@ function Residentpage() {
                 </div>
                 <div class="text-center">
                   <button
-                    class="btn btn-primary btn-xl text-uppercase disabled"
+                    class="btn btn-primary btn-xl text-uppercase"
                     id="submitButton"
                     type="submit"
+                    onClick={() =>
+                      registerUserforSchool(fetchSchoolById(selectedSchoolId))
+                    }
                   >
                     REGISTER
                   </button>
