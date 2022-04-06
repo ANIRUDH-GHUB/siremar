@@ -7,7 +7,7 @@ import "./ManageResidents.css";
 import { Link } from "react-router-dom";
 import { set } from "draft-js/lib/EditorState";
 
-function ManageResidents() {
+function ManageSchools() {
   const [residents, setResidents] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [user, setUser] = React.useState();
@@ -333,4 +333,4 @@ function ManageResidents() {
   );
 }
 
-export default ManageResidents;
+export default ManageSchools;

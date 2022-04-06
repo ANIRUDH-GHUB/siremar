@@ -24,6 +24,9 @@ import Blog from "./pages/Blog";
 import Post from "./pages/Post";
 import CreatePost from "./pages/CreatePost";
 import ManageResidents from "./pages/ManageResidents";
+import ManageInspectors from "./pages/ManageInspectors";
+import ManageBusiness from "./pages/ManageBusiness";
+import ManageSchools from "./pages/ManageSchools";
 
 function App() {
   // let cachedRole = localStorage.getItem("user_role");
@@ -96,6 +99,30 @@ function App() {
           element={
             <ProtectedRoute userRole={Object.values(userRole)}>
               <ManageResidents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-inspectors"
+          element={
+            <ProtectedRoute userRole={Object.values(userRole)}>
+              <ManageInspectors />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-business"
+          element={
+            <ProtectedRoute userRole={Object.values(userRole)}>
+              <ManageBusiness />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-schools"
+          element={
+            <ProtectedRoute userRole={Object.values(userRole)}>
+              <ManageSchools />
             </ProtectedRoute>
           }
         />

@@ -1,30 +1,39 @@
 import React, { useEffect } from "react";
 import Loading from "../components/Loading";
 import Navbar2 from "../components/Navbar2";
-import { hostName, registerSvc, usersSvc } from "../constants/ApiEndPoints";
+import {
+  businessSvc,
+  hostName,
+  registerSvc,
+  usersSvc,
+} from "../constants/ApiEndPoints";
 import { FaPen, FaTrash } from "react-icons/fa";
 import "./ManageResidents.css";
 import { Link } from "react-router-dom";
 import { set } from "draft-js/lib/EditorState";
 
-function ManageResidents() {
-  const [residents, setResidents] = React.useState([]);
+function ManageBusiness() {
+  const [businessess, setBusinessess] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [user, setUser] = React.useState();
-  const [firstName, setFirstName] = React.useState();
-  const [lastName, setLastName] = React.useState();
-  const [email, setEmail] = React.useState();
-  const [dob, setDob] = React.useState();
-  const [address, setAddress] = React.useState();
-  const [password, setPassword] = React.useState();
+  const [title, setTitle] = React.useState();
+  const [description, setDescription] = React.useState();
+  const [date, setDate] = React.useState();
+  const [image, setImage] = React.useState();
+  const [register, setRegister] = React.useState();
   const [id, setId] = React.useState();
   const [confirmPassword, setConfirmPassword] = React.useState();
   const [openEditor, setOpenEditor] = React.useState(false);
   const [token, setToken] = React.useState(localStorage.getItem("admin_token"));
-  const residentsUrl = hostName + usersSvc + "/subscriber";
+  const businessessUrl = hostName + businessSvc;
 
   useEffect(() => {
-    fetch(residentsUrl)
+    fetch(businessessUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -33,40 +42,36 @@ function ManageResidents() {
       })
       .then((response) => {
         setIsLoading(false);
-        setResidents(response);
+        setBusinessess(response);
       })
       .catch((error) => console.log(error.message));
   }, []);
 
   const handleSubmit = () => {
     setIsLoading(true);
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
     if (token === "EMPTY") {
       alert("Error Resitering New User");
       return;
     }
-    const userObj = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password,
+    const businessObj = {
+      title: title,
+
       acf: {
-        dob: dob,
-        address: address,
+        daate: date,
+        description: description,
+        image: image,
+        register: register,
       },
     };
-    console.log(userObj);
-    const registerUrl = hostName + registerSvc + `/${id}`;
+    console.log(businessObj);
+    const registerUrl = hostName + businessSvc + `/${id}`;
     fetch(registerUrl, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(userObj),
+      body: JSON.stringify(businessObj),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -82,25 +87,21 @@ function ManageResidents() {
       });
   };
 
-  const editHandler = (resident) => {
-    console.log(resident);
+  const editHandler = (business) => {
+    console.log(business);
     setOpenEditor(true);
-    setId(resident.id);
-    setUser(resident.name);
-    setFirstName(resident.first_name);
-    setLastName(resident.last_name);
-    setEmail(resident.email);
-    setDob(resident.dob);
-    setAddress(resident.address);
-    setPassword("");
-    setConfirmPassword("");
+    setId(business.id);
+    setTitle(business.title.rendered);
+    setDescription(business.acf.description);
+    setDate(business.acf.date);
+    setImage(business.acf.image);
   };
 
-  const deleteHandler = (resident) => {
+  const deleteHandler = (business) => {
     let text = "Press a button!\nEither OK or Cancel.";
     if (window.confirm(text) == true) {
       const deleteUrl =
-        hostName + registerSvc + `/${resident.id}?reassign=1&force=true`;
+        hostName + businessSvc + `/${business.id}?reassign=1&force=true`;
       fetch(deleteUrl, {
         method: "DELETE",
         headers: {
@@ -112,7 +113,7 @@ function ManageResidents() {
         .then((data) => {
           console.log(data);
           alert("User deleted successfully");
-          setResidents(residents.filter((r) => r.id !== resident.id));
+          setBusinessess(businessess.filter((r) => r.id !== business.id));
         });
     }
   };
@@ -124,117 +125,61 @@ function ManageResidents() {
         <div className="row">
           {openEditor ? (
             <form>
-              <p>Enter New User Details</p>
+              <p>Enter Business Details</p>
 
               <div className="form-outline mb-4">
                 <label className="form-label" for="form2Example11">
-                  Username
+                  Title
                 </label>
                 <input
                   type="text"
                   id="form2Example11"
                   className="form-control"
                   placeholder="Username"
-                  onChange={(e) => setUser(e.target.value)}
-                  value={user}
+                  onChange={(e) => setTitle(e.target.value)}
+                  value={title}
                 />
               </div>
 
               <div className="form-outline mb-4">
                 <label className="form-label" for="form2Example11">
-                  Firstame
+                  Description
                 </label>
                 <input
                   type="text"
                   id="form2Example12"
                   className="form-control"
                   placeholder="Firstname"
-                  onChange={(e) => setFirstName(e.target.value)}
-                  value={firstName}
+                  onChange={(e) => setDescription(e.target.value)}
+                  value={description}
                 />
               </div>
 
               <div className="form-outline mb-4">
                 <label className="form-label" for="form2Example11">
-                  Lastname
-                </label>
-                <input
-                  type="text"
-                  id="form2Example13"
-                  className="form-control"
-                  placeholder="Lastname"
-                  onChange={(e) => setLastName(e.target.value)}
-                  value={lastName}
-                />
-              </div>
-
-              <div className="form-outline mb-4">
-                <label className="form-label" for="form2Example11">
-                  Date of Birth
+                  Date
                 </label>
                 <input
                   type="date"
                   id="form2Example14"
                   className="form-control"
                   placeholder="Date of Birth"
-                  onChange={(e) => setDob(e.target.value)}
-                  value={dob}
+                  onChange={(e) => setDate(e.target.value)}
+                  value={date}
                 />
               </div>
 
               <div className="form-outline mb-4">
                 <label className="form-label" for="form2Example11">
-                  Address
-                </label>
-                <input
-                  type="text"
-                  id="form2Example15"
-                  className="form-control"
-                  placeholder="Address"
-                  onChange={(e) => setAddress(e.target.value)}
-                  value={address}
-                />
-              </div>
-
-              <div className="form-outline mb-4">
-                <label className="form-label" for="form2Example11">
-                  Email
+                  Image
                 </label>
                 <input
                   type="email"
                   id="form2Example16"
                   className="form-control"
                   placeholder="email address"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                />
-              </div>
-
-              <div className="form-outline mb-4">
-                <label className="form-label" for="form2Example22">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="form2Example22"
-                  className="form-control"
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                />
-              </div>
-
-              <div className="form-outline mb-4">
-                <label className="form-label" for="form2Example22">
-                  Confirm Password
-                </label>
-                <input
-                  type="password"
-                  id="form2Example23"
-                  className="form-control"
-                  placeholder="Confirm Password"
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  value={confirmPassword}
+                  onChange={(e) => setImage(e.target.value)}
+                  value={image}
                 />
               </div>
 
@@ -263,27 +208,25 @@ function ManageResidents() {
                   <thead>
                     <tr>
                       <th>
-                        <span>User</span>
+                        <span>Featured Image</span>
                       </th>
                       <th>
-                        <span>Firstname</span>
+                        <span>Title</span>
                       </th>
                       <th>
-                        <span>Lastname</span>
+                        <span>Description</span>
                       </th>
                       <th>
-                        <span>Role</span>
+                        <span>Date</span>
                       </th>
-                      <th>
-                        <span>Email</span>
-                      </th>
+
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
                   <tbody>
                     {isLoading
                       ? null
-                      : residents.map((resident, index) => (
+                      : businessess.map((business, index) => (
                           <tr>
                             <td>
                               <img
@@ -292,30 +235,27 @@ function ManageResidents() {
                                 }.png`}
                                 alt=""
                               />
-                              <a href="#" className="user-link">
-                                {resident.first_name} {resident.last_name}
-                              </a>
+                              {/* <a href="#" className="user-link">
+                                {business.first_name} {business.last_name}
+                              </a> */}
                               {/* <span className="user-subhead">Admin</span> */}
                             </td>
-                            <td>{resident.first_name}</td>
-                            <td>{resident.last_name}</td>
-                            <td>{resident.role}</td>
+                            <td>{business.title.rendered}</td>
+                            <td>{business.acf.description}</td>
+                            <td>{business.acf.date}</td>
 
-                            <td>
-                              <a href="#">{resident.email}</a>
-                            </td>
                             <td className="edit-icons">
                               <a
                                 href="#"
                                 className="table-link"
-                                onClick={() => editHandler(resident)}
+                                onClick={() => editHandler(business)}
                               >
                                 <FaPen />
                               </a>
                               <a
                                 href="#"
                                 className="table-link danger"
-                                onClick={() => deleteHandler(resident)}
+                                onClick={() => deleteHandler(business)}
                               >
                                 <FaTrash />
                               </a>
@@ -333,4 +273,4 @@ function ManageResidents() {
   );
 }
 
-export default ManageResidents;
+export default ManageBusiness;

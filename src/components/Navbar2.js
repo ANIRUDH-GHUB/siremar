@@ -57,7 +57,7 @@ function Navbar2() {
         <li class="nav-item dropdown">
           <Link
             class="nav-link dropdown-toggle"
-            to="/"
+            to="/adminpage"
             id="navbarDropdown"
             role="button"
             data-toggle="dropdown"

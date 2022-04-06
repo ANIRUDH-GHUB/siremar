@@ -7,8 +7,8 @@ import "./ManageResidents.css";
 import { Link } from "react-router-dom";
 import { set } from "draft-js/lib/EditorState";
 
-function ManageResidents() {
-  const [residents, setResidents] = React.useState([]);
+function ManageInspectors() {
+  const [inspectors, setInspectors] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [user, setUser] = React.useState();
   const [firstName, setFirstName] = React.useState();
@@ -21,10 +21,10 @@ function ManageResidents() {
   const [confirmPassword, setConfirmPassword] = React.useState();
   const [openEditor, setOpenEditor] = React.useState(false);
   const [token, setToken] = React.useState(localStorage.getItem("admin_token"));
-  const residentsUrl = hostName + usersSvc + "/subscriber";
+  const inspectorsUrl = hostName + usersSvc + "/editor";
 
   useEffect(() => {
-    fetch(residentsUrl)
+    fetch(inspectorsUrl)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -33,7 +33,7 @@ function ManageResidents() {
       })
       .then((response) => {
         setIsLoading(false);
-        setResidents(response);
+        setInspectors(response);
       })
       .catch((error) => console.log(error.message));
   }, []);
@@ -82,25 +82,25 @@ function ManageResidents() {
       });
   };
 
-  const editHandler = (resident) => {
-    console.log(resident);
+  const editHandler = (inspector) => {
+    console.log(inspector);
     setOpenEditor(true);
-    setId(resident.id);
-    setUser(resident.name);
-    setFirstName(resident.first_name);
-    setLastName(resident.last_name);
-    setEmail(resident.email);
-    setDob(resident.dob);
-    setAddress(resident.address);
+    setId(inspector.id);
+    setUser(inspector.name);
+    setFirstName(inspector.first_name);
+    setLastName(inspector.last_name);
+    setEmail(inspector.email);
+    setDob(inspector.dob);
+    setAddress(inspector.address);
     setPassword("");
     setConfirmPassword("");
   };
 
-  const deleteHandler = (resident) => {
+  const deleteHandler = (inspector) => {
     let text = "Press a button!\nEither OK or Cancel.";
     if (window.confirm(text) == true) {
       const deleteUrl =
-        hostName + registerSvc + `/${resident.id}?reassign=1&force=true`;
+        hostName + registerSvc + `/${inspector.id}?reassign=1&force=true`;
       fetch(deleteUrl, {
         method: "DELETE",
         headers: {
@@ -112,7 +112,7 @@ function ManageResidents() {
         .then((data) => {
           console.log(data);
           alert("User deleted successfully");
-          setResidents(residents.filter((r) => r.id !== resident.id));
+          setInspectors(inspectors.filter((r) => r.id !== inspector.id));
         });
     }
   };
@@ -266,7 +266,7 @@ function ManageResidents() {
                         <span>User</span>
                       </th>
                       <th>
-                        <span>Firstname</span>
+                        <span>Firstame</span>
                       </th>
                       <th>
                         <span>Lastname</span>
@@ -283,7 +283,7 @@ function ManageResidents() {
                   <tbody>
                     {isLoading
                       ? null
-                      : residents.map((resident, index) => (
+                      : inspectors.map((inspector, index) => (
                           <tr>
                             <td>
                               <img
@@ -293,29 +293,29 @@ function ManageResidents() {
                                 alt=""
                               />
                               <a href="#" className="user-link">
-                                {resident.first_name} {resident.last_name}
+                                {inspector.name}
                               </a>
                               {/* <span className="user-subhead">Admin</span> */}
                             </td>
-                            <td>{resident.first_name}</td>
-                            <td>{resident.last_name}</td>
-                            <td>{resident.role}</td>
+                            <td>{inspector.first_name}</td>
+                            <td>{inspector.last_name}</td>
+                            <td>{inspector.role}</td>
 
                             <td>
-                              <a href="#">{resident.email}</a>
+                              <a href="#">{inspector.email}</a>
                             </td>
                             <td className="edit-icons">
                               <a
                                 href="#"
                                 className="table-link"
-                                onClick={() => editHandler(resident)}
+                                onClick={() => editHandler(inspector)}
                               >
                                 <FaPen />
                               </a>
                               <a
                                 href="#"
                                 className="table-link danger"
-                                onClick={() => deleteHandler(resident)}
+                                onClick={() => deleteHandler(inspector)}
                               >
                                 <FaTrash />
                               </a>
@@ -333,4 +333,4 @@ function ManageResidents() {
   );
 }
 
-export default ManageResidents;
+export default ManageInspectors;

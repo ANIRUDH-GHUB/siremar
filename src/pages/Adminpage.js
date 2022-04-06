@@ -9,6 +9,7 @@ import Navbar2 from "../components/Navbar2";
 import Loading from "../components/Loading";
 import { hostName, schoolSvc, usersSvc } from "../constants/ApiEndPoints";
 import Sidenav from "../components/Sidenav";
+import { useNavigate } from "react-router-dom";
 
 function Adminpage() {
   const [residents, setResidents] = React.useState([]);
@@ -16,6 +17,8 @@ function Adminpage() {
   const [schools, setSchools] = React.useState([]);
   const [businesses, setBusinesses] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const usersUrl = hostName + usersSvc;
@@ -76,7 +79,13 @@ function Adminpage() {
               <div className="row mb-4">
                 <div className="col-xl-3 col-md-6">
                   <Loading height={80} isLoading={isLoading}>
-                    <div className="card bg-primary text-white mb-4">
+                    <div
+                      className="card bg-primary text-white mb-4"
+                      role="button"
+                      onClick={() => {
+                        navigate("/manage-residents");
+                      }}
+                    >
                       <div className="card-body">
                         <h5>Manage Residents</h5>
                         <small
@@ -90,7 +99,13 @@ function Adminpage() {
                 </div>
                 <div className="col-xl-3 col-md-6">
                   <Loading height={80} isLoading={isLoading}>
-                    <div className="card bg-warning text-white mb-4">
+                    <div
+                      className="card bg-warning text-white mb-4"
+                      role="button"
+                      onClick={() => {
+                        navigate("/manage-inspectors");
+                      }}
+                    >
                       <div className="card-body">
                         <h5>Manage Inspectors</h5>
                         <small
@@ -104,7 +119,13 @@ function Adminpage() {
                 </div>
                 <div className="col-xl-3 col-md-6">
                   <Loading height={80} isLoading={isLoading}>
-                    <div className="card bg-success text-white mb-4">
+                    <div
+                      className="card bg-success text-white mb-4"
+                      role="button"
+                      onClick={() => {
+                        navigate("/manage-business");
+                      }}
+                    >
                       <div className="card-body">
                         <h5> Manage Business </h5>
                         <small
@@ -118,7 +139,13 @@ function Adminpage() {
                 </div>
                 <div className="col-xl-3 col-md-6">
                   <Loading height={80} isLoading={isLoading}>
-                    <div className="card bg-danger text-white mb-4">
+                    <div
+                      className="card bg-danger text-white mb-4"
+                      role="button"
+                      onClick={() => {
+                        navigate("/manage-schools");
+                      }}
+                    >
                       <div className="card-body">
                         <h5>Manage Schools</h5>
                         <small
