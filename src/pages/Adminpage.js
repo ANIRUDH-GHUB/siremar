@@ -7,7 +7,12 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Barchart from "../components/Barchart";
 import Navbar2 from "../components/Navbar2";
 import Loading from "../components/Loading";
-import { hostName, schoolSvc, usersSvc } from "../constants/ApiEndPoints";
+import {
+  hostName,
+  schoolSvc,
+  usersSvc,
+  businessSvc,
+} from "../constants/ApiEndPoints";
 import Sidenav from "../components/Sidenav";
 import { useNavigate } from "react-router-dom";
 
@@ -23,6 +28,7 @@ function Adminpage() {
   useEffect(() => {
     const usersUrl = hostName + usersSvc;
     const schoolsUrl = hostName + schoolSvc;
+    const businessUrl = hostName + businessSvc;
 
     fetch(usersUrl, {
       method: "GET",
@@ -43,7 +49,9 @@ function Adminpage() {
         setInspectors(response.filter((user) => user.role === "editor"));
       })
       .catch((error) => console.log(error.message));
+
     setIsLoading(true);
+
     fetch(schoolsUrl, {
       method: "GET",
       headers: {
@@ -60,6 +68,27 @@ function Adminpage() {
       .then((response) => {
         setIsLoading(false);
         setSchools(response);
+      })
+      .catch((error) => console.log(error.message));
+
+    setIsLoading(true);
+
+    fetch(businessUrl, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((response) => {
+        setIsLoading(false);
+        setBusinesses(response);
       })
       .catch((error) => console.log(error.message));
   }, []);
@@ -131,7 +160,7 @@ function Adminpage() {
                         <small
                           style={{ fontSize: "12px", paddingLeft: "100px" }}
                         >
-                          1560
+                          {businesses.length}
                         </small>
                       </div>
                     </div>

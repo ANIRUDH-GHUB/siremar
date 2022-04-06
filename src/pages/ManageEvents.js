@@ -7,7 +7,7 @@ import "./ManageResidents.css";
 import { Link } from "react-router-dom";
 import { set } from "draft-js/lib/EditorState";
 
-function ManageSchools() {
+function ManageEvents() {
   const [schools, setSchools] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -15,15 +15,11 @@ function ManageSchools() {
   const [city, setCity] = React.useState();
   const [state, setState] = React.useState();
   const [zip, setZip] = React.useState();
-  const [image, setImage] = React.useState();
 
   const [id, setId] = React.useState();
   const [openEditor, setOpenEditor] = React.useState(false);
   const [token, setToken] = React.useState(localStorage.getItem("admin_token"));
   const schoolsUrl = hostName + schoolSvc;
-
-  const defaultSchoolImg =
-    "https://cdn-icons-png.flaticon.com/512/855/855601.png";
 
   useEffect(() => {
     fetch(schoolsUrl)
@@ -42,7 +38,10 @@ function ManageSchools() {
 
   const handleSubmit = () => {
     setIsLoading(true);
-
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
     if (token === "EMPTY") {
       alert("Error Resitering New User");
       return;
@@ -53,42 +52,36 @@ function ManageSchools() {
         city: city,
         state: state,
         zip: zip,
-        image: image,
       },
     };
     console.log(schoolObj);
-    // const registerUrl = hostName + schoolSvc + `/${id}`;
-    // fetch(registerUrl, {
-    //   method: "PUT",
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(schoolObj),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     alert("User updated successfully");
-    //     setIsLoading(false);
+    const registerUrl = hostName + schoolSvc + `/${id}`;
+    fetch(registerUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(schoolObj),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        alert("User updated successfully");
+        setIsLoading(false);
 
-    //     // navigate("/login");
-    //   })
-    //   .catch((error) => {
-    //     setIsLoading(false);
-    //     console.log(error);
-    //   });
+        // navigate("/login");
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log(error);
+      });
   };
 
   const editHandler = (school) => {
     console.log(school);
     setOpenEditor(true);
     setId(school.id);
-    setTitle(school.title.rendered);
-    setCity(school.acf.city);
-    setState(school.acf.state);
-    setZip(school.acf.zip);
-    setImage(school.acf.image);
   };
 
   const deleteHandler = (school) => {
@@ -129,7 +122,7 @@ function ManageSchools() {
                   type="text"
                   id="form2Example11"
                   className="form-control"
-                  placeholder="Title"
+                  placeholder="Username"
                   onChange={(e) => setTitle(e.target.value)}
                   value={title}
                 />
@@ -143,7 +136,7 @@ function ManageSchools() {
                   type="text"
                   id="form2Example12"
                   className="form-control"
-                  placeholder="City"
+                  placeholder="Firstname"
                   onChange={(e) => setCity(e.target.value)}
                   value={city}
                 />
@@ -157,7 +150,7 @@ function ManageSchools() {
                   type="text"
                   id="form2Example13"
                   className="form-control"
-                  placeholder="State"
+                  placeholder="Lastname"
                   onChange={(e) => setState(e.target.value)}
                   value={state}
                 />
@@ -168,24 +161,12 @@ function ManageSchools() {
                   ZIP
                 </label>
                 <input
+                  type="date"
                   id="form2Example14"
                   className="form-control"
-                  placeholder="ZIP"
+                  placeholder="Date of Birth"
                   onChange={(e) => setZip(e.target.value)}
                   value={zip}
-                />
-              </div>
-
-              <div className="form-outline mb-4">
-                <label className="form-label" for="form2Example11">
-                  Image
-                </label>
-                <input
-                  id="form2Example14"
-                  className="form-control"
-                  placeholder="Image"
-                  onChange={(e) => setImage(e.target.value)}
-                  value={image}
                 />
               </div>
 
@@ -238,11 +219,9 @@ function ManageSchools() {
                           <tr>
                             <td>
                               <img
-                                src={
-                                  school.acf.image
-                                    ? school.acf.image
-                                    : defaultSchoolImg
-                                }
+                                src={`https://bootdey.com/img/Content/avatar/avatar${
+                                  (index % 5) + 1
+                                }.png`}
                                 alt=""
                               />
                               {/* <a href="#" className="user-link">
@@ -254,7 +233,7 @@ function ManageSchools() {
                             <td>{school.acf.city}</td>
                             <td>{school.acf.state}</td>
 
-                            <td>{school.acf.zip}</td>
+                            <td>{school.zip}</td>
                             <td className="edit-icons">
                               <a
                                 href="#"
@@ -284,4 +263,4 @@ function ManageSchools() {
   );
 }
 
-export default ManageSchools;
+export default ManageEvents;
