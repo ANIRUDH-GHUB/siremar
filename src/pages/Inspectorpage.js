@@ -1,9 +1,12 @@
 /*Pranavi Remidi     1001956946
   Krishna Chaithanya 1001957981
   Madhuri Mittapalli 1001856681*/
+import moveBlockInContentState from "draft-js/lib/moveBlockInContentState";
 import React, { useEffect } from "react";
+import moment from 'moment';
 import Navbar2 from "../components/Navbar2";
-import { hostName, usersSvc,registerSvc, flightSvc, schoolSvc, businessSvc } from "../constants/ApiEndPoints";
+import { hostName, usersSvc,registerSvc, flightSvc, schoolSvc, businessSvc, eventSvc } from "../constants/ApiEndPoints";
+
 
 function Inspectorpage() {
 const [users, setUsers] = React.useState([]);
@@ -20,6 +23,11 @@ const[zip, setZip] = React.useState();
 const[bussinessDate,  setBussinessDate] = React.useState();
 const[description, setDescription] = React.useState();
 const[business,setBussiness]  = React.useState();
+const[event, setEvent] = React.useState();
+const[eventdescription, setEventDescription] = React.useState();
+const[eventDate, setEventDate] = React.useState();
+const[eventTime, setEventTime] = React.useState();
+const[location, setLocation] = React.useState();
 
   useEffect(() => {
     const userUrl = hostName + usersSvc;
@@ -29,7 +37,31 @@ const[business,setBussiness]  = React.useState();
          setUsers(data)
       }))
   },[])
-
+const registerEvent = () =>{
+  const eventUrl = hostName + eventSvc;
+  const eventObj = {
+    title: event,
+    acf:{
+      description: eventdescription, 
+      date: eventDate,
+      time: eventTime,
+      location: location
+    },
+    status: "publish",
+  }
+  fetch(eventUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization : "Bearer " + localStorage.getItem("token")
+    },
+    body: JSON.stringify(eventObj)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+  })
+}
   const reegisterSchool = () => {
     console.log("clicked");
     const schoolUrl = hostName + schoolSvc;
@@ -110,10 +142,16 @@ const[business,setBussiness]  = React.useState();
     setSelectedUserId(e.target.value);
   }
 
+  const fetchUserById = (id) => {
+    return users.find((user) => user.id === parseInt(id));
+  };
   const handleMoveOut =()=>{
-      console.log("button clicjed");
-      console.log(selectedUserId,moveout);
+    const user = fetchUserById(selectedUserId);
+    console.log(user);
+     const endDate = moment(moveout, "DD-MM-YYYY");
+     const startDate = moment(user.move_in, "DD-MM-YYYY");
       const userUrl = hostName + registerSvc + "/" + selectedUserId;
+      if(moment(endDate).isAfter(startDate)){
       fetch(userUrl,{
         method:'PUT',
         headers:{
@@ -126,6 +164,7 @@ const[business,setBussiness]  = React.useState();
           },
         })
       });
+    }
   }
 
   return (
@@ -499,11 +538,12 @@ const[business,setBussiness]  = React.useState();
             </div>
           </div>
 
+
           <div class="col-sm-6">
             <div class="row align-items-stretch mb-5">
               <strong>
                 <p>
-                  Inpects <span>Business</span>{" "}
+                  Register <span>Events</span>{" "}
                 </p>
               </strong>
               <div class="col-md-6">
@@ -512,8 +552,10 @@ const[business,setBussiness]  = React.useState();
                     class="form-control"
                     id="name"
                     type="text"
-                    placeholder="Enter Input*"
+                    placeholder="Enter Event Name"
                     data-sb-validations="required"
+                    onChange={ (e) => setEvent(e.target.value)}
+                    value={event}
                   />
                   <div
                     class="invalid-feedback"
@@ -526,9 +568,11 @@ const[business,setBussiness]  = React.useState();
                   <input
                     class="form-control"
                     id="email"
-                    type="email"
-                    placeholder="Your Email *"
+                    type="date"
+                    placeholder="Enter Event Date"
                     data-sb-validations="required,email"
+                    onChange={(e) => setEventDate(e.target.value)}
+                    value={bussinessDate}
                   />
                   <div
                     class="invalid-feedback"
@@ -540,78 +584,81 @@ const[business,setBussiness]  = React.useState();
                     Email is not valid.
                   </div>
                 </div>
-                <div class="form-group mb-3">
-                  <select class="form-select" id="inputGroupSelect02">
-                    <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
+                
+                <div class="form-group mb-3 ">
+                  <input
+                    class="form-control"
+                    id="email"
+                    type="text"
+                    placeholder="Enter Event Description"
+                    data-sb-validations="required,email"
+                    onChange={(e) => setEventDescription(e.target.value)}  
+                    value={eventdescription}
+                  />
+                  <div
+                    class="invalid-feedback"
+                    data-sb-feedback="email:required"
+                  >
+                    An email is required.
+                  </div>
+                  <div class="invalid-feedback" data-sb-feedback="email:email">
+                    Email is not valid.
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="col-sm-8">
-                  <div class="form-group form-group-textarea mb-md-0">
-                    <textarea
-                      class="form-control"
-                      cols="4"
-                      rows="5"
-                      id="message"
-                      placeholder="type here  *"
-                      data-sb-validations="required"
-                    ></textarea>
-                    <div
-                      class="invalid-feedback"
-                      data-sb-feedback="message:required"
-                    >
-                      A message is required.
-                    </div>
+                <div class="form-group mb-3 ">
+                  <input
+                    class="form-control"
+                    id="email"
+                    type="text"
+                    placeholder="Enter Event time"
+                    data-sb-validations="required,email"
+                    onChange = {(e) => setEventTime(e.target.value)}
+                    value={eventTime}
+                  />
+                  <div
+                    class="invalid-feedback"
+                    data-sb-feedback="email:required"
+                  >
+                    An email is required.
+                  </div>
+                  <div class="invalid-feedback" data-sb-feedback="email:email">
+                    Email is not valid.
+                  </div>
+                </div>
+                 <div class="form-group mb-3 ">
+                  <input
+                    class="form-control"
+                    id="email"
+                    type="text"
+                    placeholder="Enter Event location"
+                    data-sb-validations="required,email"
+                    onChange = {(e) => setLocation(e.target.value)}
+                    value={location}
+                  />
+                  <div
+                    class="invalid-feedback"
+                    data-sb-feedback="email:required"
+                  >
+                    An email is required.
+                  </div>
+                  <div class="invalid-feedback" data-sb-feedback="email:email">
+                    Email is not valid.
                   </div>
                 </div>
               </div>
               <div class="text-center">
                 <button
-                  class="btn btn-primary btn-xl text-uppercase disabled"
+                  class="btn btn-primary btn-xl text-uppercase"
                   id="submitButton"
                   type="submit"
+                  onClick={()=>registerEvent()}
                 >
-                  Save Button
+                  Register Event
                 </button>
               </div>
             </div>
-
-            <div class="col-md-6">
-              <div class="col-sm-8">
-                <div class="form-group form-group-textarea mb-md-0">
-                  <p> CHAT</p>
-                  <textarea
-                    class="form-control"
-                    cols="4"
-                    rows="5"
-                    id="message"
-                    placeholder="chat here with Resident *"
-                    data-sb-validations="required"
-                  ></textarea>
-                  <div
-                    class="invalid-feedback"
-                    data-sb-feedback="message:required"
-                  >
-                    chat here.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="text">
-              <button
-                class="btn btn-primary btn-xl text-uppercase disabled"
-                id="submitButton"
-                type="submit"
-
-              >
-                SEND{" "}
-              </button>
-            </div>
           </div>
+          
         </div>
       </div>
     </div>
