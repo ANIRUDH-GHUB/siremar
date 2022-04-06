@@ -43,3 +43,9 @@
 .nav-item.dropdown:hover > div {
   display: block !important;
 }
+
+td,
+option,
+select {
+  text-transform: capitalize;
+}

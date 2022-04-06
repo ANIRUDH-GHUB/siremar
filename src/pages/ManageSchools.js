@@ -57,27 +57,27 @@ function ManageSchools() {
       },
     };
     console.log(schoolObj);
-    // const registerUrl = hostName + schoolSvc + `/${id}`;
-    // fetch(registerUrl, {
-    //   method: "PUT",
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(schoolObj),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     alert("User updated successfully");
-    //     setIsLoading(false);
+    const registerUrl = hostName + schoolSvc + `/${id}`;
+    fetch(registerUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(schoolObj),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        alert("User updated successfully");
+        setIsLoading(false);
 
-    //     // navigate("/login");
-    //   })
-    //   .catch((error) => {
-    //     setIsLoading(false);
-    //     console.log(error);
-    //   });
+        // navigate("/login");
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log(error);
+      });
   };
 
   const editHandler = (school) => {
