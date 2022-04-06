@@ -61,6 +61,7 @@ function Register() {
       acf: {
         dob: dob,
         address: address,
+        move_in: new Date(),
       },
     };
     console.log(userObj);

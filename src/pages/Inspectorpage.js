@@ -1,10 +1,47 @@
 /*Pranavi Remidi     1001956946
   Krishna Chaithanya 1001957981
   Madhuri Mittapalli 1001856681*/
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar2 from "../components/Navbar2";
+import { hostName, usersSvc,registerSvc } from "../constants/ApiEndPoints";
 
 function Inspectorpage() {
+const [users, setUsers] = React.useState([]);
+const [selectedUserId, setSelectedUserId] = React.useState(null);
+const [moveout, setMoveout] = React.useState();
+  
+  useEffect(() => {
+    const userUrl = hostName + usersSvc;
+       fetch(userUrl)
+       .then(response => response.json()
+       .then(data => {console.log(data)
+         setUsers(data)
+      }))
+  },[])
+
+  const handleUserChange =(e)=>{
+    console.log(e.target.value);
+    setSelectedUserId(e.target.value);
+  }
+
+  const handleMoveOut =()=>{
+      console.log("button clicjed");
+      console.log(selectedUserId,moveout);
+      const userUrl = hostName + registerSvc + "/" + selectedUserId;
+      fetch(userUrl,{
+        method:'PUT',
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("admin_token"),
+        },
+        body:JSON.stringify({
+          acf: {
+            move_out: moveout
+          },
+        })
+      });
+  }
+
   return (
     <div class="sb-nav-fixed">
       <Navbar2 />
@@ -64,12 +101,8 @@ function Inspectorpage() {
                   </div>
                 </div>
                 <div class="form-group mb-3">
-                  <select class="form-select" id="inputGroupSelect02">
-                    <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
+                  
+                 
                 </div>
               </div>
               <div class="col-md-6">
@@ -197,21 +230,25 @@ function Inspectorpage() {
               </strong>
               <div class="col-md-6">
                 <div class="form-group mb-3 ">
+                <label className="form-label" for="form2Example11">
+                          Move Out Date:
+                        </label>
                   <input
                     class="form-control"
                     id="name"
-                    type="text"
-                    placeholder="Enter Input*"
+                    type="date"
+                    placeholder="Enter MoveOut date"
                     data-sb-validations="required"
+                    onChange={(e) => setMoveout(e.target.value)}
                   />
                   <div
                     class="invalid-feedback"
                     data-sb-feedback="name:required"
                   >
-                    A name is required.
+                    A Date is required.
                   </div>
                 </div>
-                <div class="form-group mb-3 ">
+                {/* <div class="form-group mb-3 ">
                   <input
                     class="form-control"
                     id="email"
@@ -228,13 +265,18 @@ function Inspectorpage() {
                   <div class="invalid-feedback" data-sb-feedback="email:email">
                     Email is not valid.
                   </div>
-                </div>
+                </div> */}
                 <div class="form-group mb-3">
-                  <select class="form-select" id="inputGroupSelect02">
-                    <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                  <select class="form-select" id="inputGroupSelect02"
+                    onChange={handleUserChange}
+                  >
+                  <option selected>Choose User...</option>
+                     { users.map(user => (
+                        <option value={user.id}>
+                          {user.name}
+                          </option>
+                      ))
+                      }
                   </select>
                 </div>
               </div>
@@ -246,23 +288,24 @@ function Inspectorpage() {
                       cols="4"
                       rows="5"
                       id="message"
-                      placeholder="Your Message *"
+                      placeholder="Reason to move out"
                       data-sb-validations="required"
                     ></textarea>
                     <div
                       class="invalid-feedback"
                       data-sb-feedback="message:required"
                     >
-                      A message is required.
+                      Reason to move out
                     </div>
                   </div>
                 </div>
               </div>
               <div class="text-center">
                 <button
-                  class="btn btn-primary btn-xl text-uppercase disabled"
+                  class="btn btn-primary btn-xl text-uppercase"
                   id="submitButton"
                   type="submit"
+                  onClick={()=>handleMoveOut()}
                 >
                   Save Button
                 </button>
