@@ -3,16 +3,28 @@
   Madhuri Mittapalli 1001856681*/
 import React, { useEffect } from "react";
 import Navbar2 from "../components/Navbar2";
-import { hostName, schoolSvc } from "../constants/ApiEndPoints";
+import { hostName, schoolSvc,businessSvc,eventSvc, flightSvc } from "../constants/ApiEndPoints";
 
 function Residentpage() {
   const [schools, setSchools] = React.useState([]);
   const [registeredSchools, setRegisteredSchools] = React.useState([]);
   const [selectedSchoolId, setSelectedSchoolId] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [events, setEvents] = React.useState([]);
+  const [business, setBusiness] = React.useState([]);
+  const[registeredEvents,setRegisteredEvents]=React.useState([]);
+  const[registeredBusiness,setRegisteredBusiness]=React.useState([]);
+  const [bussId, setBussId] = React.useState(null);
+  const[selectedEventId,setSelectedEventId]=React.useState(null);
+  const[flights,setFlights]=React.useState([]);
 
   const schoolsUrl = hostName + schoolSvc;
+  const bussUrl = hostName + businessSvc;
+  const eventUrl = hostName + eventSvc;
+  const flightUrl =hostName+ flightSvc;
 
   useEffect(() => {
+
     fetch(schoolsUrl)
       .then((res) => res.json())
       .then((data) => {
@@ -21,6 +33,37 @@ function Residentpage() {
         fetchAllRegisteredSchools(data);
       })
       .catch((err) => console.log(err));
+
+
+      fetch(bussUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setBusiness(data);
+        fetchAllRegisteredBusiness(data);
+
+      })
+      .catch((err) => console.log(err));
+
+
+      fetch(eventUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setEvents(data);
+        fetchAllRegisteredEvents(data);
+      })
+      .catch((err) => console.log(err));
+
+      fetch(flightUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Flights "+data);
+          setFlights(data);
+      })
+      .catch((err) => console.log(err));
+
+
   }, []);
 
   const checkIfUserIsRegistered = (register) => {
@@ -36,6 +79,32 @@ function Residentpage() {
     return schools.find((school) => school.id === parseInt(id));
   };
 
+  const fetchBusinesssById = (id) => {
+    return business.find((bus) => bus.id === parseInt(id));
+  };
+  const fetchEventById = (id) => {
+    return events.find((event) => event.id === parseInt(id));
+  };
+
+  const fetchAllRegisteredEvents = (events) => {
+    const registeredEvents = [];
+    events.forEach((event) => {
+      if (checkIfUserIsRegistered(event.acf.register)) {
+        registeredEvents.push(event);
+      }
+    });
+    console.log("registeredSchools", registeredSchools);
+    setRegisteredEvents(registeredEvents);
+  };
+  const fetchAllRegisteredBusiness= (business) => {
+    const registeredBussiness = [];
+    business.forEach((bus) => {
+      if (checkIfUserIsRegistered(bus.acf.register)) {
+        registeredBussiness.push(bus);
+      }
+    });
+    setRegisteredBusiness(registeredBussiness);
+  };
   const fetchAllRegisteredSchools = (schools) => {
     const registeredSchools = [];
     schools.forEach((school) => {
@@ -65,6 +134,47 @@ function Residentpage() {
       });
     } else {
       alert("You are already registered for this school");
+    }
+  };
+  const registerUserforEvent = (event) => {
+    if (!checkIfUserIsRegistered(event.acf.register)) {
+      console.log(event);
+      fetch(eventUrl + `/${selectedEventId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("admin_token"),
+        },
+        body: JSON.stringify({
+          acf: {
+            register:
+            event?.acf.register + "," + localStorage.getItem("user_id"),
+          },
+        }),
+      });
+    } else {
+      alert("You are already registered for this Event");
+    }
+  };
+  const registerUserforBusiness= (bus) => {
+    console.log("business");
+    if (!checkIfUserIsRegistered(bus.acf.register)) {
+      console.log(bus);
+      fetch(bussUrl + `/${bussId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("admin_token"),
+        },
+        body: JSON.stringify({
+          acf: {
+            register:
+              bus?.acf.register + "," + localStorage.getItem("user_id"),
+          },
+        }),
+      });
+    } else {
+      alert("You are already registered for this business");
     }
   };
 
@@ -101,46 +211,16 @@ function Residentpage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>FL 305</td>
-                    <td>02/04/21</td>
-                    <td>Dallas</td>
-                    <td>02:00pm</td>
-                    <td> 20% </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>AB 786</td>
-                    <td>13/11/21</td>
-                    <td>New York</td>
-                    <td>06:00pm</td>
-                    <td> 20% </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>GH 612</td>
-                    <td>21/11/21</td>
-                    <td>Chicago</td>
-                    <td>09:30pm</td>
-                    <td> 20% </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>UW 892</td>
-                    <td>13/11/21</td>
-                    <td>Seattle</td>
-                    <td>03:30pm</td>
-                    <td> 20% </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>OB 901</td>
-                    <td>02/04/21</td>
-                    <td>San Francisco</td>
-                    <td>10:30am</td>
-                    <td> 20% </td>
-                  </tr>
+                  {flights.map((flight, index) => (
+                    <tr>
+                      <th scope="row">{index + 1}</th>
+                      <td>{flight.title.rendered}</td>
+                      <td>{flight.acf.date}</td>
+                      <td>{flight.acf.destination}</td>
+                      <td>{flight.acf.time}</td>
+                      <td>12%</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -156,11 +236,10 @@ function Residentpage() {
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Flight</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Destination</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Disconts</th>
+                    <th scope="col">School</th>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">zip</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -177,6 +256,76 @@ function Residentpage() {
               </table>
             </div>
           </div>
+         
+
+          <br></br>
+          <br></br>
+          <div class="row mb-5">
+            <div class="col-sm-4">
+              <strong>
+                <p>
+                  Registered <span> Businesses </span>{" "}
+                </p>
+              </strong>
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Business</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {registeredBusiness.map((bus, index) => (
+                    <tr>
+                      <th scope="row">{index + 1}</th>
+                      <td>{bus.title.rendered}</td>
+                      <td>{bus.acf.date}</td>
+                      <td>{bus.acf.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        <br></br>
+        <br></br>
+        <div class="row mb-5">
+            <div class="col-sm-4">
+              <strong>
+                <p>
+                  Registered <span> Events </span>{" "}
+                </p>
+              </strong>
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {registeredEvents.map((event, index) => (
+                    <tr>
+                      <th scope="row">{index + 1}</th>
+                      <td>{event.title.rendered}</td>
+                      <td>{event.acf.date}</td>
+                      <td>{event.acf.description}</td>
+                      <td>{event.acf.time}</td>
+                      <td>{event.acf.location}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div class="col-sm-5" style={{ paddingRight: "100px" }}>
             <form>
               <label>
@@ -192,8 +341,7 @@ function Residentpage() {
             </form>
           </div>
 
-          <br></br>
-          <br></br>
+
 
           <div class="row">
             <div class="col-sm-6">
@@ -294,7 +442,7 @@ function Residentpage() {
                 <div class="row align-items-stretch mb-5">
                   <strong>
                     <p>
-                      See<span>Business</span>{" "}
+                      <span>Business Registration</span>{" "}
                     </p>
                   </strong>
                   <div class="col-md-6">
@@ -335,11 +483,15 @@ function Residentpage() {
                       </div>
                     </div>
                     <div class="form-group mb-3">
-                      <select class="form-select" id="inputGroupSelect02">
-                        <option selected>Search for Business...</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <select class="form-select" id="inputGroupSelect02"
+                      onChange={(e)=> setBussId(e.target.value)}>
+                      <option selected>Choose Business...</option>
+                      { 
+                              business.map((bus) => (
+                              <option value={bus.id}>
+                                {bus.title.rendered}
+                                </option>))
+                        }
                       </select>
                     </div>
                   </div>
@@ -365,9 +517,10 @@ function Residentpage() {
                   </div>
                   <div class="text-center">
                     <button
-                      class="btn btn-primary btn-xl text-uppercase disabled"
+                      class="btn btn-primary btn-xl text-uppercase"
                       id="submitButton"
                       type="submit"
+                      onClick={() =>registerUserforBusiness( fetchBusinesssById(bussId))}
                     >
                       REGISTER
                     </button>
@@ -379,7 +532,7 @@ function Residentpage() {
                     <div class="row align-items-stretch mb-5">
                       <strong>
                         <p>
-                          See <span>Events</span>{" "}
+                           <span>Events Registration</span>{" "}
                         </p>
                       </strong>
                       <div class="col-md-6">
@@ -420,11 +573,15 @@ function Residentpage() {
                           </div>
                         </div>
                         <div class="form-group mb-3">
-                          <select class="form-select" id="inputGroupSelect02">
-                            <option selected>Search for Business...</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                          <select class="form-select" id="inputGroupSelect02"
+                          onChange={(e)=>setSelectedEventId(e.target.value)}>
+                             {
+                               events.map((event) => (
+                                  <option value={event.id}>
+                                    {event.title.rendered}
+                                  </option>
+                                ))
+                             }
                           </select>
                         </div>
                       </div>
@@ -450,9 +607,10 @@ function Residentpage() {
                       </div>
                       <div class="text-center">
                         <button
-                          class="btn btn-primary btn-xl text-uppercase disabled"
+                          class="btn btn-primary btn-xl text-uppercase"
                           id="submitButton"
                           type="submit"
+                          onClick={() =>registerUserforEvent( fetchEventById(selectedEventId))}
                         >
                           REGISTER
                         </button>
