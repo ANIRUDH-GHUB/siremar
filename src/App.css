@@ -49,3 +49,20 @@ option,
 select {
   text-transform: capitalize;
 }
+
+.row strong {
+  text-align: center;
+}
+@media (max-width: 1024px) {
+  .section-heading {
+    padding: 15% 0 !important;
+  }
+}
+@media (max-width: 567px) {
+  .section-heading {
+    padding: 20% 0 !important;
+  }
+}
+.section-heading {
+  padding: 10% 0;
+}
