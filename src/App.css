@@ -66,3 +66,17 @@ select {
 .section-heading {
   padding: 10% 0;
 }
+
+.col-md-8.m-auto p {
+  font-size: 24px;
+  text-align: start;
+  text-transform: uppercase;
+}
+
+.sb-nav-fixed {
+  font-family: "Lora";
+}
+
+.text-start {
+  text-align: start;
+}

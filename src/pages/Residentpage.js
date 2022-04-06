@@ -3,7 +3,13 @@
   Madhuri Mittapalli 1001856681*/
 import React, { useEffect } from "react";
 import Navbar2 from "../components/Navbar2";
-import { hostName, schoolSvc,businessSvc,eventSvc, flightSvc } from "../constants/ApiEndPoints";
+import {
+  hostName,
+  schoolSvc,
+  businessSvc,
+  eventSvc,
+  flightSvc,
+} from "../constants/ApiEndPoints";
 
 function Residentpage() {
   const [schools, setSchools] = React.useState([]);
@@ -12,19 +18,18 @@ function Residentpage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [events, setEvents] = React.useState([]);
   const [business, setBusiness] = React.useState([]);
-  const[registeredEvents,setRegisteredEvents]=React.useState([]);
-  const[registeredBusiness,setRegisteredBusiness]=React.useState([]);
+  const [registeredEvents, setRegisteredEvents] = React.useState([]);
+  const [registeredBusiness, setRegisteredBusiness] = React.useState([]);
   const [bussId, setBussId] = React.useState(null);
-  const[selectedEventId,setSelectedEventId]=React.useState(null);
-  const[flights,setFlights]=React.useState([]);
+  const [selectedEventId, setSelectedEventId] = React.useState(null);
+  const [flights, setFlights] = React.useState([]);
 
   const schoolsUrl = hostName + schoolSvc;
   const bussUrl = hostName + businessSvc;
   const eventUrl = hostName + eventSvc;
-  const flightUrl =hostName+ flightSvc;
+  const flightUrl = hostName + flightSvc;
 
   useEffect(() => {
-
     fetch(schoolsUrl)
       .then((res) => res.json())
       .then((data) => {
@@ -34,19 +39,16 @@ function Residentpage() {
       })
       .catch((err) => console.log(err));
 
-
-      fetch(bussUrl)
+    fetch(bussUrl)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setBusiness(data);
         fetchAllRegisteredBusiness(data);
-
       })
       .catch((err) => console.log(err));
 
-
-      fetch(eventUrl)
+    fetch(eventUrl)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -55,15 +57,13 @@ function Residentpage() {
       })
       .catch((err) => console.log(err));
 
-      fetch(flightUrl)
+    fetch(flightUrl)
       .then((res) => res.json())
       .then((data) => {
-        console.log("Flights "+data);
-          setFlights(data);
+        console.log("Flights " + data);
+        setFlights(data);
       })
       .catch((err) => console.log(err));
-
-
   }, []);
 
   const checkIfUserIsRegistered = (register) => {
@@ -96,7 +96,7 @@ function Residentpage() {
     console.log("registeredSchools", registeredSchools);
     setRegisteredEvents(registeredEvents);
   };
-  const fetchAllRegisteredBusiness= (business) => {
+  const fetchAllRegisteredBusiness = (business) => {
     const registeredBussiness = [];
     business.forEach((bus) => {
       if (checkIfUserIsRegistered(bus.acf.register)) {
@@ -148,7 +148,7 @@ function Residentpage() {
         body: JSON.stringify({
           acf: {
             register:
-            event?.acf.register + "," + localStorage.getItem("user_id"),
+              event?.acf.register + "," + localStorage.getItem("user_id"),
           },
         }),
       });
@@ -156,7 +156,7 @@ function Residentpage() {
       alert("You are already registered for this Event");
     }
   };
-  const registerUserforBusiness= (bus) => {
+  const registerUserforBusiness = (bus) => {
     console.log("business");
     if (!checkIfUserIsRegistered(bus.acf.register)) {
       console.log(bus);
@@ -168,8 +168,7 @@ function Residentpage() {
         },
         body: JSON.stringify({
           acf: {
-            register:
-              bus?.acf.register + "," + localStorage.getItem("user_id"),
+            register: bus?.acf.register + "," + localStorage.getItem("user_id"),
           },
         }),
       });
@@ -182,18 +181,13 @@ function Residentpage() {
     <div class="sb-nav-fixed">
       <Navbar2 />
 
-      <div class=" mb-md-0" style={{ padding: "100px" }}>
+      <div class="container-fluid mb-md-0">
         <div class="text-center">
           <strong>
-            <h1
-              class="section-heading text-uppercase mb-3"
-              style={{ padding: "80px" }}
-            >
-              hello resident
-            </h1>
+            <h1 class="section-heading text-uppercase mb-3">hello resident</h1>
           </strong>
           <div class="row mb-5">
-            <div class="col-sm-4">
+            <div class="col-md-8 m-auto">
               <strong>
                 <p>
                   FLIGHT <span> DISCONTS </span>{" "}
@@ -226,7 +220,7 @@ function Residentpage() {
             </div>
           </div>
           <div class="row mb-5">
-            <div class="col-sm-4">
+            <div class="col-md-8 m-auto">
               <strong>
                 <p>
                   Registered <span> Schools </span>{" "}
@@ -256,12 +250,11 @@ function Residentpage() {
               </table>
             </div>
           </div>
-         
 
           <br></br>
           <br></br>
           <div class="row mb-5">
-            <div class="col-sm-4">
+            <div class="col-md-8 m-auto">
               <strong>
                 <p>
                   Registered <span> Businesses </span>{" "}
@@ -290,10 +283,10 @@ function Residentpage() {
             </div>
           </div>
 
-        <br></br>
-        <br></br>
-        <div class="row mb-5">
-            <div class="col-sm-4">
+          <br></br>
+          <br></br>
+          <div class="row mb-5">
+            <div class="col-md-8 m-auto">
               <strong>
                 <p>
                   Registered <span> Events </span>{" "}
@@ -326,25 +319,98 @@ function Residentpage() {
             </div>
           </div>
 
-          <div class="col-sm-5" style={{ paddingRight: "100px" }}>
-            <form>
-              <label>
-                Choose Date :
-                <input
-                  type="date"
-                  name="bday"
-                  required
-                  pattern="\d{4}-\d{2}-\d{2}"
-                />
-                <span class="validity"></span>
-              </label>
-            </form>
-          </div>
-
-
-
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-md-8 m-auto">
+              <div class="row align-items-stretch mb-5">
+                <strong>
+                  <p>
+                    <span>Events Registration</span>{" "}
+                  </p>
+                </strong>
+                <div class="col-md-6">
+                  <div class="form-group mb-3 ">
+                    <input
+                      class="form-control"
+                      id="name"
+                      type="text"
+                      placeholder="Enter Input*"
+                      data-sb-validations="required"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      data-sb-feedback="name:required"
+                    >
+                      A name is required.
+                    </div>
+                  </div>
+                  <div class="form-group mb-3 ">
+                    <input
+                      class="form-control"
+                      id="email"
+                      type="email"
+                      placeholder="Your Email *"
+                      data-sb-validations="required,email"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      data-sb-feedback="email:required"
+                    >
+                      An email is required.
+                    </div>
+                    <div
+                      class="invalid-feedback"
+                      data-sb-feedback="email:email"
+                    >
+                      Email is not valid.
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <select
+                      class="form-select"
+                      id="inputGroupSelect02"
+                      onChange={(e) => setSelectedEventId(e.target.value)}
+                    >
+                      {events.map((event) => (
+                        <option value={event.id}>{event.title.rendered}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="col-sm-8">
+                    <div class="form-group form-group-textarea mb-md-0">
+                      <textarea
+                        class="form-control"
+                        cols="4"
+                        rows="5"
+                        id="message"
+                        placeholder="Your Message *"
+                        data-sb-validations="required"
+                      ></textarea>
+                      <div
+                        class="invalid-feedback"
+                        data-sb-feedback="message:required"
+                      >
+                        A message is required.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-start">
+                  <button
+                    class="btn btn-primary btn-xl text-uppercase"
+                    id="submitButton"
+                    type="submit"
+                    onClick={() =>
+                      registerUserforEvent(fetchEventById(selectedEventId))
+                    }
+                  >
+                    REGISTER
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8 m-auto">
               <div class="row align-items-stretch mb-5">
                 <strong>
                   <p>
@@ -423,7 +489,7 @@ function Residentpage() {
                     </div>
                   </div>
                 </div>
-                <div class="text-center">
+                <div class="text-start">
                   <button
                     class="btn btn-primary btn-xl text-uppercase"
                     id="submitButton"
@@ -438,7 +504,7 @@ function Residentpage() {
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-md-8 m-auto">
                 <div class="row align-items-stretch mb-5">
                   <strong>
                     <p>
@@ -483,15 +549,15 @@ function Residentpage() {
                       </div>
                     </div>
                     <div class="form-group mb-3">
-                      <select class="form-select" id="inputGroupSelect02"
-                      onChange={(e)=> setBussId(e.target.value)}>
-                      <option selected>Choose Business...</option>
-                      { 
-                              business.map((bus) => (
-                              <option value={bus.id}>
-                                {bus.title.rendered}
-                                </option>))
-                        }
+                      <select
+                        class="form-select"
+                        id="inputGroupSelect02"
+                        onChange={(e) => setBussId(e.target.value)}
+                      >
+                        <option selected>Choose Business...</option>
+                        {business.map((bus) => (
+                          <option value={bus.id}>{bus.title.rendered}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -515,109 +581,21 @@ function Residentpage() {
                       </div>
                     </div>
                   </div>
-                  <div class="text-center">
+                  <div class="text-start">
                     <button
                       class="btn btn-primary btn-xl text-uppercase"
                       id="submitButton"
                       type="submit"
-                      onClick={() =>registerUserforBusiness( fetchBusinesssById(bussId))}
+                      onClick={() =>
+                        registerUserforBusiness(fetchBusinesssById(bussId))
+                      }
                     >
                       REGISTER
                     </button>
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="row align-items-stretch mb-5">
-                      <strong>
-                        <p>
-                           <span>Events Registration</span>{" "}
-                        </p>
-                      </strong>
-                      <div class="col-md-6">
-                        <div class="form-group mb-3 ">
-                          <input
-                            class="form-control"
-                            id="name"
-                            type="text"
-                            placeholder="Enter Input*"
-                            data-sb-validations="required"
-                          />
-                          <div
-                            class="invalid-feedback"
-                            data-sb-feedback="name:required"
-                          >
-                            A name is required.
-                          </div>
-                        </div>
-                        <div class="form-group mb-3 ">
-                          <input
-                            class="form-control"
-                            id="email"
-                            type="email"
-                            placeholder="Your Email *"
-                            data-sb-validations="required,email"
-                          />
-                          <div
-                            class="invalid-feedback"
-                            data-sb-feedback="email:required"
-                          >
-                            An email is required.
-                          </div>
-                          <div
-                            class="invalid-feedback"
-                            data-sb-feedback="email:email"
-                          >
-                            Email is not valid.
-                          </div>
-                        </div>
-                        <div class="form-group mb-3">
-                          <select class="form-select" id="inputGroupSelect02"
-                          onChange={(e)=>setSelectedEventId(e.target.value)}>
-                             {
-                               events.map((event) => (
-                                  <option value={event.id}>
-                                    {event.title.rendered}
-                                  </option>
-                                ))
-                             }
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="col-sm-8">
-                          <div class="form-group form-group-textarea mb-md-0">
-                            <textarea
-                              class="form-control"
-                              cols="4"
-                              rows="5"
-                              id="message"
-                              placeholder="Your Message *"
-                              data-sb-validations="required"
-                            ></textarea>
-                            <div
-                              class="invalid-feedback"
-                              data-sb-feedback="message:required"
-                            >
-                              A message is required.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="text-center">
-                        <button
-                          class="btn btn-primary btn-xl text-uppercase"
-                          id="submitButton"
-                          type="submit"
-                          onClick={() =>registerUserforEvent( fetchEventById(selectedEventId))}
-                        >
-                          REGISTER
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <div class="row"></div>
                 <div class="col-md-6">
                   <div class="col-sm-8">
                     <div class="form-group form-group-textarea mb-md-0">
