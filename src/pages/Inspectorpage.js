@@ -68,7 +68,9 @@ function Inspectorpage() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-      });
+        alert("Event Created");
+      })
+      .catch((error) => alert("Error Registering Event"));
   };
   const reegisterSchool = () => {
     console.log("clicked");
@@ -92,8 +94,10 @@ function Inspectorpage() {
     })
       .then((response) => response.json())
       .then((data) => {
+        alert("School Created");
         console.log(data);
-      });
+      })
+      .catch((error) => alert("Error Registering School"));
   };
   const reegisterBusiness = () => {
     console.log("clicked");
@@ -116,8 +120,10 @@ function Inspectorpage() {
     })
       .then((response) => response.json())
       .then((data) => {
+        alert("Business Created");
         console.log(data);
-      });
+      })
+      .catch((error) => alert("Error Registering Business"));
   };
 
   const registerFlights = () => {
@@ -141,8 +147,10 @@ function Inspectorpage() {
     })
       .then((response) => response.json())
       .then((data) => {
+        alert("Flight Created");
         console.log(data);
-      });
+      })
+      .catch((error) => alert("Error Registering Flight"));
   };
   const handleUserChange = (e) => {
     console.log(e.target.value);
@@ -170,7 +178,15 @@ function Inspectorpage() {
             move_out: moveout,
           },
         }),
+      }).then((res) => {
+        if (res.ok) {
+          alert("User Updated Successfully");
+        } else {
+          alert("Error while updating user");
+        }
       });
+    } else {
+      alert("Move out date should be after move in date");
     }
   };
 

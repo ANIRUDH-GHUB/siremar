@@ -69,7 +69,8 @@ function ManageSchools() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        alert("User updated successfully");
+        alert("School updated successfully");
+        setOpenEditor(false);
         setIsLoading(false);
 
         // navigate("/login");

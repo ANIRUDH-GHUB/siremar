@@ -4,6 +4,7 @@ import Navbar2 from "../components/Navbar2";
 import { hostName, registerSvc, usersSvc } from "../constants/ApiEndPoints";
 import { FaPen, FaTrash } from "react-icons/fa";
 import "./ManageResidents.css";
+import moment from "moment";
 import { Link } from "react-router-dom";
 import { set } from "draft-js/lib/EditorState";
 
@@ -13,6 +14,7 @@ function ManageResidents() {
   const [user, setUser] = React.useState();
   const [firstName, setFirstName] = React.useState();
   const [lastName, setLastName] = React.useState();
+  const [role, setRole] = React.useState();
   const [email, setEmail] = React.useState();
   const [dob, setDob] = React.useState();
   const [address, setAddress] = React.useState();
@@ -53,6 +55,7 @@ function ManageResidents() {
       last_name: lastName,
       email: email,
       password: password,
+      roles: role,
       acf: {
         dob: dob,
         address: address,
@@ -72,6 +75,7 @@ function ManageResidents() {
       .then((data) => {
         console.log(data);
         alert("User updated successfully");
+        setOpenEditor(false);
         setIsLoading(false);
 
         // navigate("/login");
@@ -166,6 +170,20 @@ function ManageResidents() {
                   onChange={(e) => setLastName(e.target.value)}
                   value={lastName}
                 />
+              </div>
+              <div className="form-outline mb-4">
+                <label className="form-label" for="form2Example11">
+                  Role
+                </label>
+                <select
+                  className="form-select"
+                  id="inputGroupSelect02"
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <option selected>Choose Role...</option>
+                  <option value="subscriber">Resident</option>
+                  <option value="editor">Inspector</option>
+                </select>
               </div>
 
               <div className="form-outline mb-4">
@@ -272,7 +290,10 @@ function ManageResidents() {
                         <span>Lastname</span>
                       </th>
                       <th>
-                        <span>Role</span>
+                        <span>Move In</span>
+                      </th>
+                      <th>
+                        <span>Move Out</span>
                       </th>
                       <th>
                         <span>Email</span>
@@ -295,11 +316,18 @@ function ManageResidents() {
                               <a href="#" className="user-link">
                                 {resident.first_name} {resident.last_name}
                               </a>
-                              {/* <span className="user-subhead">Admin</span> */}
+                              <span className="user-subhead">
+                                {resident.role}
+                              </span>
                             </td>
                             <td>{resident.first_name}</td>
                             <td>{resident.last_name}</td>
-                            <td>{resident.role}</td>
+                            <td>
+                              {moment(resident.move_in).format("MMMM Do YYYY")}
+                            </td>
+                            <td>
+                              {moment(resident.move_out).format("MMMM Do YYYY")}
+                            </td>
 
                             <td>
                               <a href="#">{resident.email}</a>

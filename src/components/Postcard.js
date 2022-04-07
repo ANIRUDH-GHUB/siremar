@@ -4,19 +4,19 @@ import "./Postcard.css";
 
 const Post = ({ blog }) => {
   return (
-    <div class="post-card">
+    <div className="post-card">
       <div className="card">
-        {/* <img src="..." class="card-img-top" alt="..." /> */}
-        <div class="card-body">
-          <h5 class="card-title">{blog.title.rendered}</h5>
+        {/* <img src="..." className="card-img-top" alt="..." /> */}
+        <div className="card-body">
+          <h5 className="card-title">{blog.title.rendered}</h5>
 
           <div
             dangerouslySetInnerHTML={{
               __html: blog.content.rendered.substring(0, 40),
             }}
-            class="card-text"
+            className="card-text"
           ></div>
-          <Link to={"/post/" + blog.id} class="btn btn-primary">
+          <Link to={"/post/" + blog.id} className="btn btn-primary">
             Read More
           </Link>
         </div>

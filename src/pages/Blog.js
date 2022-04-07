@@ -57,7 +57,7 @@ function Blog() {
   };
 
   return (
-    <div class="blog-page">
+    <div className="blog-page">
       <Navbar2 />
       <div className="blog-container">
         <div className="blog-wrapper">

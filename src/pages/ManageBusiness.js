@@ -76,7 +76,8 @@ function ManageBusiness() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        alert("User updated successfully");
+        setOpenEditor(false);
+        alert("Business updated successfully");
         setIsLoading(false);
 
         // navigate("/login");

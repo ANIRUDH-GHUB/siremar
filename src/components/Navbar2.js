@@ -15,48 +15,48 @@ function Navbar2() {
   };
 
   return (
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-      <Link class="navbar-brand ps-3" to="/">
+    <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+      <Link className="navbar-brand ps-3" to="/">
         Siremar Admin
       </Link>
 
       <button
-        class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
+        className="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
         id="sidebarToggle"
         href="#!"
       >
-        <i class="fas fa-bars"></i>
+        <i className="fas fa-bars"></i>
       </button>
 
-      <ul class="navbar-nav  ms-auto me-3 me-lg-4">
-        <li class="nav-item active">
-          <Link class="nav-link" to="/">
+      <ul className="navbar-nav  ms-auto me-3 me-lg-4">
+        <li className="nav-item active">
+          <Link className="nav-link" to="/">
             Home{" "}
           </Link>
         </li>
-        <li class="nav-item">
-          <Link class="nav-link" to="/about">
+        <li className="nav-item">
+          <Link className="nav-link" to="/about">
             About
           </Link>
         </li>
-        <li class="nav-item">
-          <Link class="nav-link" to="/services">
+        <li className="nav-item">
+          <Link className="nav-link" to="/services">
             Services
           </Link>
         </li>
-        <li class="nav-item">
-          <Link class="nav-link" to="/">
+        <li className="nav-item">
+          <Link className="nav-link" to="/">
             Contact
           </Link>
         </li>
-        <li class="nav-item">
-          <Link to="/blog" class="nav-link">
+        <li className="nav-item">
+          <Link to="/blog" className="nav-link">
             Blog
           </Link>
         </li>
-        <li class="nav-item dropdown">
+        <li className="nav-item dropdown">
           <Link
-            class="nav-link dropdown-toggle"
+            className="nav-link dropdown-toggle"
             to="/adminpage"
             id="navbarDropdown"
             role="button"
@@ -66,32 +66,36 @@ function Navbar2() {
           >
             {user_role}
           </Link>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <Link class="dropdown-item" to="/">
+          <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+            <Link className="dropdown-item" to="/">
               Action
             </Link>
-            <Link class="dropdown-item" to="/">
+            <Link className="dropdown-item" to="/">
               Another action
             </Link>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-item" onClick={() => handleLogout()}>
+            <div className="dropdown-divider"></div>
+            <div className="dropdown-item" onClick={() => handleLogout()}>
               Log out
             </div>
           </div>
         </li>
       </ul>
 
-      <form class="d-none d-md-inline-block form-inline ms-md me-0 me-md-3 my-2 my-md-0">
-        <div class="input-group">
+      <form className="d-none d-md-inline-block form-inline ms-md me-0 me-md-3 my-2 my-md-0">
+        <div className="input-group">
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             placeholder="Search for..."
             aria-label="Search for..."
             aria-describedby="btnNavbarSearch"
           />
-          <button class="btn btn-primary" id="btnNavbarSearch" type="button">
-            <i class="fas fa-search"></i>
+          <button
+            className="btn btn-primary"
+            id="btnNavbarSearch"
+            type="button"
+          >
+            <i className="fas fa-search"></i>
           </button>
         </div>
       </form>

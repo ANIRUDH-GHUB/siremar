@@ -71,7 +71,8 @@ function ManageInspectors() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        alert("User updated successfully");
+        alert("Inspector updated successfully");
+        setOpenEditor(false);
         setIsLoading(false);
 
         // navigate("/login");

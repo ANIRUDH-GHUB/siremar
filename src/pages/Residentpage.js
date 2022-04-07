@@ -131,6 +131,13 @@ function Residentpage() {
               school?.acf.register + "," + localStorage.getItem("user_id"),
           },
         }),
+      }).then((res) => {
+        if (res.ok) {
+          setRegisteredSchools([...registeredSchools, school]);
+          alert("Registered Successfully");
+        } else {
+          alert("Error while registering");
+        }
       });
     } else {
       alert("You are already registered for this school");
@@ -151,6 +158,13 @@ function Residentpage() {
               event?.acf.register + "," + localStorage.getItem("user_id"),
           },
         }),
+      }).then((res) => {
+        if (res.ok) {
+          setRegisteredEvents([...registeredEvents, event]);
+          alert("Registered Successfully");
+        } else {
+          alert("Error while registering");
+        }
       });
     } else {
       alert("You are already registered for this Event");
@@ -171,6 +185,13 @@ function Residentpage() {
             register: bus?.acf.register + "," + localStorage.getItem("user_id"),
           },
         }),
+      }).then((res) => {
+        if (res.ok) {
+          setRegisteredBusiness([...registeredBusiness, bus]);
+          alert("Registered Successfully");
+        } else {
+          alert("Error while registering");
+        }
       });
     } else {
       alert("You are already registered for this business");
@@ -178,22 +199,24 @@ function Residentpage() {
   };
 
   return (
-    <div class="sb-nav-fixed">
+    <div className="sb-nav-fixed">
       <Navbar2 />
 
-      <div class="container-fluid mb-md-0">
-        <div class="text-center">
+      <div className="container-fluid mb-md-0">
+        <div className="text-center">
           <strong>
-            <h1 class="section-heading text-uppercase mb-3">hello resident</h1>
+            <h1 className="section-heading text-uppercase mb-3">
+              hello resident
+            </h1>
           </strong>
-          <div class="row mb-5">
-            <div class="col-md-8 m-auto">
+          <div className="row mb-5">
+            <div className="col-md-8 m-auto">
               <strong>
                 <p>
                   FLIGHT <span> DISCONTS </span>{" "}
                 </p>
               </strong>
-              <table class="table table-bordered table-striped">
+              <table className="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -219,14 +242,14 @@ function Residentpage() {
               </table>
             </div>
           </div>
-          <div class="row mb-5">
-            <div class="col-md-8 m-auto">
+          <div className="row mb-5">
+            <div className="col-md-8 m-auto">
               <strong>
                 <p>
                   Registered <span> Schools </span>{" "}
                 </p>
               </strong>
-              <table class="table table-bordered table-striped">
+              <table className="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -253,14 +276,14 @@ function Residentpage() {
 
           <br></br>
           <br></br>
-          <div class="row mb-5">
-            <div class="col-md-8 m-auto">
+          <div className="row mb-5">
+            <div className="col-md-8 m-auto">
               <strong>
                 <p>
                   Registered <span> Businesses </span>{" "}
                 </p>
               </strong>
-              <table class="table table-bordered table-striped">
+              <table className="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -285,14 +308,14 @@ function Residentpage() {
 
           <br></br>
           <br></br>
-          <div class="row mb-5">
-            <div class="col-md-8 m-auto">
+          <div className="row mb-5">
+            <div className="col-md-8 m-auto">
               <strong>
                 <p>
                   Registered <span> Events </span>{" "}
                 </p>
               </strong>
-              <table class="table table-bordered table-striped">
+              <table className="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -319,68 +342,69 @@ function Residentpage() {
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-8 m-auto">
-              <div class="row align-items-stretch mb-5">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <div className="row align-items-stretch mb-5">
                 <strong>
                   <p>
                     <span>Events Registration</span>{" "}
                   </p>
                 </strong>
-                <div class="col-md-6">
-                  <div class="form-group mb-3 ">
+                <div className="col-md-6">
+                  <div className="form-group mb-3 ">
                     <input
-                      class="form-control"
+                      className="form-control"
                       id="name"
                       type="text"
                       placeholder="Enter Input*"
                       data-sb-validations="required"
                     />
                     <div
-                      class="invalid-feedback"
+                      className="invalid-feedback"
                       data-sb-feedback="name:required"
                     >
                       A name is required.
                     </div>
                   </div>
-                  <div class="form-group mb-3 ">
+                  <div className="form-group mb-3 ">
                     <input
-                      class="form-control"
+                      className="form-control"
                       id="email"
                       type="email"
                       placeholder="Your Email *"
                       data-sb-validations="required,email"
                     />
                     <div
-                      class="invalid-feedback"
+                      className="invalid-feedback"
                       data-sb-feedback="email:required"
                     >
                       An email is required.
                     </div>
                     <div
-                      class="invalid-feedback"
+                      className="invalid-feedback"
                       data-sb-feedback="email:email"
                     >
                       Email is not valid.
                     </div>
                   </div>
-                  <div class="form-group mb-3">
+                  <div className="form-group mb-3">
                     <select
-                      class="form-select"
+                      className="form-select"
                       id="inputGroupSelect02"
                       onChange={(e) => setSelectedEventId(e.target.value)}
                     >
+                      <option selected>Choose Event...</option>
                       {events.map((event) => (
                         <option value={event.id}>{event.title.rendered}</option>
                       ))}
                     </select>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="col-sm-8">
-                    <div class="form-group form-group-textarea mb-md-0">
+                <div className="col-md-6">
+                  <div className="col-sm-8">
+                    <div className="form-group form-group-textarea mb-md-0">
                       <textarea
-                        class="form-control"
+                        className="form-control"
                         cols="4"
                         rows="5"
                         id="message"
@@ -388,7 +412,7 @@ function Residentpage() {
                         data-sb-validations="required"
                       ></textarea>
                       <div
-                        class="invalid-feedback"
+                        className="invalid-feedback"
                         data-sb-feedback="message:required"
                       >
                         A message is required.
@@ -396,9 +420,9 @@ function Residentpage() {
                     </div>
                   </div>
                 </div>
-                <div class="text-start">
+                <div className="text-start">
                   <button
-                    class="btn btn-primary btn-xl text-uppercase"
+                    className="btn btn-primary btn-xl text-uppercase"
                     id="submitButton"
                     type="submit"
                     onClick={() =>
@@ -410,53 +434,53 @@ function Residentpage() {
                 </div>
               </div>
             </div>
-            <div class="col-md-8 m-auto">
-              <div class="row align-items-stretch mb-5">
+            <div className="col-md-8 m-auto">
+              <div className="row align-items-stretch mb-5">
                 <strong>
                   <p>
                     School <span>Registration</span>{" "}
                   </p>
                 </strong>
-                <div class="col-md-6">
-                  <div class="form-group mb-3 ">
+                <div className="col-md-6">
+                  <div className="form-group mb-3 ">
                     <input
-                      class="form-control"
+                      className="form-control"
                       id="name"
                       type="text"
                       placeholder="Enter Input*"
                       data-sb-validations="required"
                     />
                     <div
-                      class="invalid-feedback"
+                      className="invalid-feedback"
                       data-sb-feedback="name:required"
                     >
                       A name is required.
                     </div>
                   </div>
-                  <div class="form-group mb-3 ">
+                  <div className="form-group mb-3 ">
                     <input
-                      class="form-control"
+                      className="form-control"
                       id="email"
                       type="email"
                       placeholder="Your Email *"
                       data-sb-validations="required,email"
                     />
                     <div
-                      class="invalid-feedback"
+                      className="invalid-feedback"
                       data-sb-feedback="email:required"
                     >
                       An email is required.
                     </div>
                     <div
-                      class="invalid-feedback"
+                      className="invalid-feedback"
                       data-sb-feedback="email:email"
                     >
                       Email is not valid.
                     </div>
                   </div>
-                  <div class="form-group mb-3">
+                  <div className="form-group mb-3">
                     <select
-                      class="form-select"
+                      className="form-select"
                       id="inputGroupSelect02"
                       onChange={handleSchoolOption}
                     >
@@ -469,11 +493,11 @@ function Residentpage() {
                     </select>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="col-sm-8">
-                    <div class="form-group form-group-textarea mb-md-0">
+                <div className="col-md-6">
+                  <div className="col-sm-8">
+                    <div className="form-group form-group-textarea mb-md-0">
                       <textarea
-                        class="form-control"
+                        className="form-control"
                         cols="4"
                         rows="5"
                         id="message"
@@ -481,7 +505,7 @@ function Residentpage() {
                         data-sb-validations="required"
                       ></textarea>
                       <div
-                        class="invalid-feedback"
+                        className="invalid-feedback"
                         data-sb-feedback="message:required"
                       >
                         A message is required.
@@ -489,9 +513,9 @@ function Residentpage() {
                     </div>
                   </div>
                 </div>
-                <div class="text-start">
+                <div className="text-start">
                   <button
-                    class="btn btn-primary btn-xl text-uppercase"
+                    className="btn btn-primary btn-xl text-uppercase"
                     id="submitButton"
                     type="submit"
                     onClick={() =>
@@ -503,54 +527,54 @@ function Residentpage() {
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-8 m-auto">
-                <div class="row align-items-stretch mb-5">
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <div className="row align-items-stretch mb-5">
                   <strong>
                     <p>
                       <span>Business Registration</span>{" "}
                     </p>
                   </strong>
-                  <div class="col-md-6">
-                    <div class="form-group mb-3 ">
+                  <div className="col-md-6">
+                    <div className="form-group mb-3 ">
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="name"
                         type="text"
                         placeholder="Enter Input*"
                         data-sb-validations="required"
                       />
                       <div
-                        class="invalid-feedback"
+                        className="invalid-feedback"
                         data-sb-feedback="name:required"
                       >
                         A name is required.
                       </div>
                     </div>
-                    <div class="form-group mb-3 ">
+                    <div className="form-group mb-3 ">
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="email"
                         type="email"
                         placeholder="Your Email *"
                         data-sb-validations="required,email"
                       />
                       <div
-                        class="invalid-feedback"
+                        className="invalid-feedback"
                         data-sb-feedback="email:required"
                       >
                         An email is required.
                       </div>
                       <div
-                        class="invalid-feedback"
+                        className="invalid-feedback"
                         data-sb-feedback="email:email"
                       >
                         Email is not valid.
                       </div>
                     </div>
-                    <div class="form-group mb-3">
+                    <div className="form-group mb-3">
                       <select
-                        class="form-select"
+                        className="form-select"
                         id="inputGroupSelect02"
                         onChange={(e) => setBussId(e.target.value)}
                       >
@@ -561,11 +585,11 @@ function Residentpage() {
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="col-sm-8">
-                      <div class="form-group form-group-textarea mb-md-0">
+                  <div className="col-md-6">
+                    <div className="col-sm-8">
+                      <div className="form-group form-group-textarea mb-md-0">
                         <textarea
-                          class="form-control"
+                          className="form-control"
                           cols="4"
                           rows="5"
                           id="message"
@@ -573,7 +597,7 @@ function Residentpage() {
                           data-sb-validations="required"
                         ></textarea>
                         <div
-                          class="invalid-feedback"
+                          className="invalid-feedback"
                           data-sb-feedback="message:required"
                         >
                           A message is required.
@@ -581,9 +605,9 @@ function Residentpage() {
                       </div>
                     </div>
                   </div>
-                  <div class="text-start">
+                  <div className="text-start">
                     <button
-                      class="btn btn-primary btn-xl text-uppercase"
+                      className="btn btn-primary btn-xl text-uppercase"
                       id="submitButton"
                       type="submit"
                       onClick={() =>
@@ -595,13 +619,13 @@ function Residentpage() {
                   </div>
                 </div>
 
-                <div class="row"></div>
-                <div class="col-md-6">
-                  <div class="col-sm-8">
-                    <div class="form-group form-group-textarea mb-md-0">
+                <div className="row"></div>
+                <div className="col-md-6">
+                  <div className="col-sm-8">
+                    <div className="form-group form-group-textarea mb-md-0">
                       <p> CHAT</p>
                       <textarea
-                        class="form-control"
+                        className="form-control"
                         cols="4"
                         rows="5"
                         id="message"
@@ -609,7 +633,7 @@ function Residentpage() {
                         data-sb-validations="required"
                       ></textarea>
                       <div
-                        class="invalid-feedback"
+                        className="invalid-feedback"
                         data-sb-feedback="message:required"
                       >
                         chat here.
@@ -617,9 +641,9 @@ function Residentpage() {
                     </div>
                   </div>
                 </div>
-                <div class="text">
+                <div className="text">
                   <button
-                    class="btn btn-primary btn-xl text-uppercase disabled"
+                    className="btn btn-primary btn-xl text-uppercase disabled"
                     id="submitButton"
                     type="submit"
                   >
