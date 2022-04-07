@@ -3,6 +3,7 @@
   Madhuri Mittapalli 1001856681*/
 import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
+import { hostName, contactSvc } from "./../constants/ApiEndPoints";
 
 function Contact() {
   const [name, setName] = React.useState("");
@@ -13,6 +14,67 @@ function Contact() {
 
   const isValidEmail = (email) => {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+  };
+
+  const handleNameChange = (event) => {
+    if (event.target.value.length === 0) {
+      event.target.classList.add("btn-outline-danger");
+    } else {
+      event.target.classList.remove("btn-outline-danger");
+    }
+    setName(event.target.value);
+  };
+
+  const handleEmailChange = (event) => {
+    if (!isValidEmail(event.target.value)) {
+      console.log(event.target.value);
+      event.target.classList.add("btn-outline-danger");
+    } else {
+      event.target.classList.remove("btn-outline-danger");
+    }
+    setEmail(event.target.value);
+  };
+
+  const handlePhoneChange = (event) => {
+    if (event.target.value.length === 0) {
+      event.target.classList.add("btn-outline-danger");
+    } else {
+      event.target.classList.remove("btn-outline-danger");
+    }
+    setPhone(event.target.value);
+  };
+  const handleMessageChange = (event) => {
+    if (event.target.value.length === 0) {
+      event.target.classList.add("btn-outline-danger");
+    } else {
+      event.target.classList.remove("btn-outline-danger");
+    }
+    setMessage(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    const contactUrl = hostName + contactSvc;
+    fetch(contactUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `your-name=${name}&your-email=${email}&your-phone=${phone}&your-message=${message}`,
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
+      .then((data) => {
+        if (data.status === "mail_sent") {
+          alert("Message sent successfully");
+        } else {
+          alert("Error While Sending Message");
+        }
+      });
   };
 
   useEffect(() => {
@@ -50,7 +112,7 @@ function Contact() {
                   type="text"
                   placeholder="Your Name *"
                   data-sb-validations="required"
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={handleNameChange}
                 />
                 <div
                   className="invalid-feedback"
@@ -66,7 +128,7 @@ function Contact() {
                   type="email"
                   placeholder="Your Email *"
                   data-sb-validations="required,email"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                 />
                 <div
                   className="invalid-feedback"
@@ -88,7 +150,7 @@ function Contact() {
                   type="tel"
                   placeholder="Your Phone *"
                   data-sb-validations="required"
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={handlePhoneChange}
                 />
                 <div
                   className="invalid-feedback"
@@ -103,7 +165,7 @@ function Contact() {
                 <textarea
                   className="form-control"
                   placeholder="Your Message *"
-                  onChange={(e) => setMessage(e.target.value)}
+                  onChange={handleMessageChange}
                 ></textarea>
                 <div
                   className="invalid-feedback"
@@ -121,19 +183,16 @@ function Contact() {
             </div>
           </div>
 
-          <div className="text-center">
-            <button
-              className={`btn btn-primary btn-xl text-uppercase ${
-                isValid ? "" : "disabled"
-              }`}
-              onClick={() => {
-                alert("Form submitted successfully!");
-              }}
-            >
-              Send Message to admin
-            </button>
-          </div>
+          <div className="text-center"></div>
         </form>
+        <button
+          className={`btn btn-primary btn-xl text-uppercase ${
+            isValid ? "" : "disabled"
+          }`}
+          onClick={() => handleSubmit()}
+        >
+          Send Message to admin
+        </button>
       </div>
     </div>
   );

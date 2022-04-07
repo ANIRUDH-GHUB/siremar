@@ -16,3 +16,6 @@ export const flightSvc = "/wp-json/wp/v2/flights";
 //Custom
 export const usersSvc = "/wp-json/wl/v1/users";
 export const postsSvc = "/wp-json/wl/v1/posts";
+
+export const contactSvc =
+  "/wp-json/contact-form-7/v1/contact-forms/89/feedback";
